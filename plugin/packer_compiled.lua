@@ -194,6 +194,11 @@ _G.packer_plugins = {
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/nvim-lua-guide",
     url = "https://github.com/nanotee/nvim-lua-guide"
   },
+  ["nvim-markdown-preview"] = {
+    loaded = true,
+    path = "/home/italo/.local/share/nvim/site/pack/packer/start/nvim-markdown-preview",
+    url = "https://github.com/davidgranstrom/nvim-markdown-preview"
+  },
   ["nvim-treesitter"] = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/nvim-treesitter",

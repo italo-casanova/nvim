@@ -10,16 +10,18 @@ return require('packer').startup(function(use)
 	use 'ambv/black'
     -- LSP
     use 'neovim/nvim-lspconfig'
+	use 'onsails/lspkind-nvim'
+	use 'nvim-lua/lsp_extensions.nvim'
+	use 'nvim-lua/lsp-status.nvim'
+	use 'glepnir/lspsaga.nvim'
+
+	-- cmp (completion)
 	use 'hrsh7th/nvim-cmp'
 	use 'hrsh7th/cmp-buffer'
 	use 'hrsh7th/cmp-path'
 	use 'hrsh7th/cmp-nvim-lua'
 	use 'hrsh7th/cmp-nvim-lsp'
- 	use {'tzachar/cmp-tabnine', run='./install.sh', requires = 'hrsh7th/nvim-cmp'}
-	use 'onsails/lspkind-nvim'
-	use 'nvim-lua/lsp_extensions.nvim'
-	use 'nvim-lua/lsp-status.nvim'
-	use 'glepnir/lspsaga.nvim'
+	use {'tzachar/cmp-tabnine', run='./install.sh', requires = 'hrsh7th/nvim-cmp'}
 	use 'saadparwaiz1/cmp_luasnip'
 
 	-- Snippets
@@ -53,6 +55,7 @@ return require('packer').startup(function(use)
 	use 'tpope/vim-projectionist'
 	use 'tomlion/vim-solidity'
 	use 'ThePrimeagen/git-worktree.nvim'
+	use 'davidgranstrom/nvim-markdown-preview'
 
 	-- telescope requirements...
 	use 'nvim-lua/popup.nvim'

@@ -24,8 +24,8 @@ vim.api.nvim_set_keymap('n', '<C-t>', ':tabnew<CR>:terminal<CR>', {noremap = tru
 
 
 vim.api.nvim_set_keymap('n', '<leader>tn', ':tabnew<CR>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>gcc', ':w<CR>:!g++ -o  %:r.exe % -std=c++11<Enter>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>p', ':w<CR>:!py %<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>gcc', ':w<CR>:!g++ -o  %:r % -std=c++11<Enter>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>p', ':w<CR>:!python %<CR>', {noremap = true, silent = true})
 
 
 -- resize buffer
