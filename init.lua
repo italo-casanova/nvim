@@ -1,10 +1,10 @@
 -- require modules
 require('plugins') -- plugins install
 require('commands') -- basic vim commands i still can't write in lua
-require('maps') -- basic remps
+require('maps') -- basic remaps
 require('lsp') -- lsp clients config
-require'plugins-conf'
-require'plugins_conf'
+require'plugins-conf' -- minors plugins conf which don't deserve it's own file
+require'plugins_conf' -- plugins config directory
 
 
 -- sets
@@ -63,3 +63,4 @@ vim.cmd([[
 endfun
 call ColorMyPencils()
     ]])
+
