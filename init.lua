@@ -46,7 +46,6 @@ vim.cmd([[
     if has('nvim')
         call luaeval('vim.cmd("colorscheme " .. _A[1])', [g:color_shceme])
     else
-        " TODO: What the way to use g:color_shceme
         colorscheme gruvbox
     endif
 
