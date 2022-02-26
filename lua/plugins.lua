@@ -34,8 +34,8 @@ return require('packer').startup(function(use)
 
 	-- Syntax
 	use 'sheerun/vim-polyglot'
-		use 'sbdchd/neoformat'
-
+	use 'sbdchd/neoformat'
+	use 'simrat39/rust-tools.nvim'
 	-- Utils
 	use 'windwp/nvim-autopairs'
 	use "lukas-reineke/indent-blankline.nvim"
@@ -56,6 +56,7 @@ return require('packer').startup(function(use)
 	use 'tomlion/vim-solidity'
 	use 'ThePrimeagen/git-worktree.nvim'
 	use 'davidgranstrom/nvim-markdown-preview'
+	use 'mfussenegger/nvim-jdtls'
 
 	-- telescope requirements...
 	use 'nvim-lua/popup.nvim'
@@ -82,6 +83,9 @@ return require('packer').startup(function(use)
 	}
 	-- Harpoon
 	use 'mhinz/vim-rfc'
+
+	-- Debug
+	use 'mfussenegger/nvim-dap'
 
 
 

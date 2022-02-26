@@ -6,10 +6,10 @@ vim.cmd([[
     endfun
 
 
-    augroup THE_PRIMEAGEN_LSP
-        autocmd!
-        autocmd! BufWrite,BufEnter,InsertLeave * :call LspLocationList()
-    augroup END
+     augroup THE_PRIMEAGEN_LSP
+          autocmd!
+          autocmd! BufWrite,BufEnter,InsertLeave * :call LspLocationList()
+      augroup END
 
     let g:compe = {}
     let g:compe.enabled = v:true
@@ -32,23 +32,11 @@ vim.cmd([[
     let g:compe.source.nvim_lsp = v:true
     let g:compe.source.nvim_lua = v:true
     let g:compe.source.vsnip = v:true
-    let g:compe.source.ultisnips = v:true
     let g:compe.source.luasnip = v:true
     ]])
 
-vim.api.nvim_set_keymap('n', '<leader>vd', ':lua vim.lsp.buf.definition()<CR>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>vi', ':lua vim.lsp.buf.implementation()<CR>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>vsh', ':lua vim.lsp.buf.signature_help()<CR>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>vrr', ':lua vim.lsp.buf.references()<CR>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>vrn', ':lua vim.lsp.buf.rename()<CR>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>vh', ':lua vim.lsp.buf.hover()<CR>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>vca', ':lua vim.lsp.buf.code_action()<CR>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>vn', ':lua vim.lsp.diagnostic.goto_next()<CR>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>vll', ':call LspLocationList()<CR>', {noremap = true, silent = true})
 
 
-vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<silent>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', {noremap = true, silent = true})
