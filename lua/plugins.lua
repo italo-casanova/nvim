@@ -21,7 +21,6 @@ return require('packer').startup(function(use)
 	use 'hrsh7th/cmp-path'
 	use 'hrsh7th/cmp-nvim-lua'
 	use 'hrsh7th/cmp-nvim-lsp'
-	use {'tzachar/cmp-tabnine', run='./install.sh', requires = 'hrsh7th/nvim-cmp'}
 	use 'saadparwaiz1/cmp_luasnip'
 
 	-- Snippets
@@ -86,6 +85,8 @@ return require('packer').startup(function(use)
 
 	-- Debug
 	use 'mfussenegger/nvim-dap'
+	use 'Pocco81/DAPInstall.nvim'
+	use 'szw/vim-maximizer'
 
 
 

@@ -1,15 +1,15 @@
--- vim.cmd([let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']]])
+vim.cmd([["let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']"]])
 
 vim.cmd([[
     fun! LspLocationList()
-        " lua vim.lsp.diagnostic.set_loclist({open_loclist = false})
+         "lua vim.lsp.diagnostic.set_loclist({open_loclist = false})
     endfun
 
 
-     augroup THE_PRIMEAGEN_LSP
-          autocmd!
-          autocmd! BufWrite,BufEnter,InsertLeave * :call LspLocationList()
-      augroup END
+    augroup THE_PRIMEAGEN_LSP
+      autocmd!
+      autocmd! BufWrite,BufEnter,InsertLeave * :call LspLocationList()
+    augroup END
 
     let g:compe = {}
     let g:compe.enabled = v:true
@@ -38,5 +38,23 @@ vim.cmd([[
 vim.api.nvim_set_keymap('n', '<leader>vn', ':lua vim.lsp.diagnostic.goto_next()<CR>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>vll', ':call LspLocationList()<CR>', {noremap = true, silent = true})
 
-
 vim.api.nvim_set_keymap('n', '<silent>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', {noremap = true, silent = true})
+
+vim.api.nvim_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>to', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], {noremap = true, silent = true})
+
+vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
+

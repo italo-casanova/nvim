@@ -69,6 +69,11 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
+  ["DAPInstall.nvim"] = {
+    loaded = true,
+    path = "/home/italo/.local/share/nvim/site/pack/packer/start/DAPInstall.nvim",
+    url = "https://github.com/Pocco81/DAPInstall.nvim"
+  },
   LuaSnip = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/LuaSnip",
@@ -98,11 +103,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/cmp-path",
     url = "https://github.com/hrsh7th/cmp-path"
-  },
-  ["cmp-tabnine"] = {
-    loaded = true,
-    path = "/home/italo/.local/share/nvim/site/pack/packer/start/cmp-tabnine",
-    url = "https://github.com/tzachar/cmp-tabnine"
   },
   cmp_luasnip = {
     loaded = true,
@@ -303,6 +303,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/vim-man",
     url = "https://github.com/vim-utils/vim-man"
+  },
+  ["vim-maximizer"] = {
+    loaded = true,
+    path = "/home/italo/.local/share/nvim/site/pack/packer/start/vim-maximizer",
+    url = "https://github.com/szw/vim-maximizer"
   },
   ["vim-polyglot"] = {
     loaded = true,

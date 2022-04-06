@@ -1,3 +1,9 @@
+function CreateNoremap(type, opts)
+	return function(lhs, rhs, bufnr)
+		bufnr = bufnr or 0
+		vim.api.nvim_buf_set_keymap(bufnr, type, lhs, rhs, opts)
+	end
+end
 -- sumneku-lua local runtime_path = vim.split(package.path, ';')
 local sumneko_root_path = "/home/italo/.config/nvim/lua-language-server"
 local sumneko_binary = sumneko_root_path .. "/bin/lua-language-server"
@@ -40,7 +46,7 @@ local lspkind = require("lspkind")
 require('lspkind').init()
 local cmp = require("cmp")
 local source_mapping = {
-buffer = "[BUFF]",
+    buffer = "[BUFF]",
     nvim_lsp = "[LSP]",
     nvim_lua = "[API]",
     path = "[PATH]",
@@ -92,53 +98,52 @@ cmp.setup({
 
   },
 
-    formatting = {
-        format = function(entry, vim_item)
-            vim_item.kind = lspkind.presets.default[vim_item.kind]
-            local menu = source_mapping[entry.source.name]
-            if entry.source.name == 'cmp_tabnine' then
-                if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
-                    menu = entry.completion_item.data.detail .. ' ' .. menu
-                end
-                vim_item.kind = ''
-            end
-            vim_item.menu = menu
-            return vim_item
-        end
+  formatting = {
+      format = lspkind.cmp_format {
+        with_text = true,
+        menu = {
+          buffer = "[BUFF]",
+          nvim_lsp = "[LSP]",
+          nvim_lua = "[API]",
+          path = "[PATH]",
+          luasnip = "[SNIP]",
+          cmp_tabnine = "[TN]",
+          gh_issues = "[ISSUES]",
+        },
+      },
+    },
+
+  experimental = {
+  --     native_menu = true,
+
+      ghost_text = true,
     },
 
 	sources = {
-        -- tabnine completion? yayaya
-
-        -- { name = "cmp_tabnine" },
 
 		{ name = "nvim_lsp" },
-
-		-- For vsnip user.
-		-- { name = 'vsnip' },
-
-		-- For luasnip user.
-		{ name = "luasnip" },
-
-		-- For ultisnips user.
-		-- { name = 'ultisnips' },
-
+        { name = "path" },
+        { name = "nvim_lua" },
+        { name = "luasnip" },
 		{ name = "buffer" },
 	},
-})
-
-local tabnine = require('cmp_tabnine.config')
-tabnine:setup({
-    max_lines = 1000,
-    max_num_results = 20,
-    sort = true,
-	run_on_every_keystroke = true,
-	snippet_placeholder = '..',
 })
 
 local function config(_config)
 	return vim.tbl_deep_extend("force", {
 		capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+        on_attach = function ()
+            Nnoremap("gd", ":lua vim.lsp.buf.definition()<CR>")
+			Nnoremap("K", ":lua vim.lsp.buf.hover()<CR>")
+			Nnoremap("<leader>vws", ":lua vim.lsp.buf.workspace_symbol()<CR>")
+			Nnoremap("<leader>vd", ":lua vim.diagnostic.open_float()<CR>")
+			Nnoremap("[d", ":lua vim.lsp.diagnostic.goto_next()<CR>")
+			Nnoremap("]d", ":lua vim.lsp.diagnostic.goto_prev()<CR>")
+			Nnoremap("<leader>vca", ":lua vim.lsp.buf.code_action()<CR>")
+			Nnoremap("<leader>vrr", ":lua vim.lsp.buf.references()<CR>")
+			Nnoremap("<leader>vrn", ":lua vim.lsp.buf.rename()<CR>")
+			Inoremap("<C-h>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
+		end,
 	}, _config or {})
 end
 
@@ -205,14 +210,23 @@ _ = vim.cmd [[
   augroup END
 ]]
 
-require'lspconfig'.pylsp.setup{}
-require('lspconfig').pyright.setup{}
-require("lspconfig").cssls.setup{}
+-- require'lspconfig'.pylsp.setup{}
+-- require('lspconfig').pyright.setup{config()}
+require("lspconfig").jedi_language_server.setup(config())
+require("lspconfig").cssls.setup{config()}
 require'lspconfig'.clangd.setup{
  cmd = { "clangd", "--background-index" },
-    filetypes = { "c", "cpp", "objc", "objcpp" }
+  filetypes = { "c", "cpp", "objc", "objcpp" }
 }
-require'lspconfig'.tsserver.setup{}
+require'lspconfig'.tsserver.setup({
+ on_attach = function(client, bufnr)
+        client.resolved_capabilities.document_formatting = false
+        client.resolved_capabilities.document_range_formatting = false
+        local ts_utils = require("nvim-lsp-ts-utils")
+        ts_utils.setup({})
+        ts_utils.setup_client(client)
+    end,
+  })
 require'lspconfig'.rust_analyzer.setup(config({
 	cmd = { "rustup", "run", "nightly", "rust-analyzer" },
     capabilities = capabilities,
@@ -237,14 +251,15 @@ require'lspconfig'.jdtls.setup{}
 -- for _, lsp in ipairs(servers) do
 --   lspconfig[lsp].setup{capabilities = capabilities,}
 -- end
-local servers = { 'clangd', 'pylsp', 'pyright', 'tsserver' }
+
+--lua/code_action_utils.lua
+local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls'}
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     capabilities = capabilities,
   }
 end
 
---lua/code_action_utils.lua
 local M = {}
 
 local lsp_util = vim.lsp.util
@@ -260,4 +275,3 @@ end
 
 return M
 
--- vim.cmd([[autocmd CursorHold,CursorHoldI * lua require('code_action_utils').code_action_listener()]])
