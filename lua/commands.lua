@@ -9,6 +9,7 @@ vim.cmd('let g:python_highlight_space_errors = 0')
 vim.cmd([[colorscheme gruvbox]])
 vim.cmd('let g:gruvbox_contrast_dark = "hard"')
 vim.cmd('set termguicolors')
+vim.cmd([[let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy'] ]])
 
 vim.cmd([[
 augroup THE_PRIMEAGEN
@@ -23,6 +24,7 @@ vim.cmd([[
     autocmd!
     autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 40})
 augroup END ]])
+
 
 vim.cmd([[
     let g:theprimeagen_colorscheme = "gruvbox"

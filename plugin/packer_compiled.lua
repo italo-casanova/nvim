@@ -259,6 +259,11 @@ _G.packer_plugins = {
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/telescope-fzy-native.nvim",
     url = "https://github.com/nvim-telescope/telescope-fzy-native.nvim"
   },
+  ["telescope-media-files.nvim"] = {
+    loaded = true,
+    path = "/home/italo/.local/share/nvim/site/pack/packer/start/telescope-media-files.nvim",
+    url = "https://github.com/nvim-telescope/telescope-media-files.nvim"
+  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/telescope.nvim",

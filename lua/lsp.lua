@@ -1,3 +1,16 @@
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
+
+function CreateNoremap(type, opts)
+	return function(lhs, rhs, bufnr)
+		bufnr = bufnr or 0
+		vim.api.nvim_buf_set_keymap(bufnr, type, lhs, rhs, opts)
+	end
+end
+
+
+Nnoremap = CreateNoremap("n", { noremap = true, silent = true })
+Inoremap = CreateNoremap("i", { noremap = true, silent = true})
+
 function CreateNoremap(type, opts)
 	return function(lhs, rhs, bufnr)
 		bufnr = bufnr or 0
@@ -14,7 +27,7 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-l>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
@@ -41,10 +54,8 @@ local has_words_before = function()
 
 local luasnip = require("luasnip")
 local cmp = require'cmp'
-local lspkind = require("lspkind")
 
 require('lspkind').init()
-local cmp = require("cmp")
 local source_mapping = {
     buffer = "[BUFF]",
     nvim_lsp = "[LSP]",
@@ -66,36 +77,46 @@ cmp.setup({
 
 		end,
 	},
-	mapping = {
-    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-    ["<C-f>"] = cmp.mapping.scroll_docs(4),
-    ["<C-e>"] = cmp.mapping.close(),
-    ["<c-y>"] = cmp.mapping(
-      cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Insert,
-        select = true,
-      },
-      { "i", "c" }
-    ),
+    mapping = {
+      ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+      ["<C-f>"] = cmp.mapping.scroll_docs(4),
+      ["<C-e>"] = cmp.mapping.close(),
+      ["<c-y>"] = cmp.mapping(
+        cmp.mapping.confirm {
+          behavior = cmp.ConfirmBehavior.Insert,
+          select = true,
+        },
+        { "i", "c" }
+        ),
 
-    ["<c-space>"] = cmp.mapping {
-      i = cmp.mapping.complete(),
-      c = function(
-        _ --[[fallback]]
-      )
-        if cmp.visible() then
-          if not cmp.confirm { select = true } then
-            return
+      ["<c-space>"] = cmp.mapping {
+        i = cmp.mapping.complete(),
+        c = function(_)
+          if cmp.visible() then
+            if not cmp.confirm { select = true } then
+              return
+            end
+          else
+            cmp.complete()
           end
-        else
-          cmp.complete()
-        end
-      end,
+        end,
+      },
+
+      ["<tab>"] = cmp.config.disable,
+      ['<c-y>'] = cmp.mapping.confirm {
+        behavior = cmp.ConfirmBehavior.Replace,
+        select = true,
+
+      },
     },
 
-    ["<tab>"] = cmp.config.disable,
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
+  },
 
-
+  view = {
+    entries = "native"
   },
 
   formatting = {
@@ -114,7 +135,6 @@ cmp.setup({
     },
 
   experimental = {
-  --     native_menu = true,
 
       ghost_text = true,
     },
@@ -131,7 +151,6 @@ cmp.setup({
 
 local function config(_config)
 	return vim.tbl_deep_extend("force", {
-		capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
         on_attach = function ()
             Nnoremap("gd", ":lua vim.lsp.buf.definition()<CR>")
 			Nnoremap("K", ":lua vim.lsp.buf.hover()<CR>")
@@ -161,25 +180,12 @@ lspconfig.ccls.setup(config({
   }
   }))
 
--- lspconfig.ccls.setup {
-  -- init_options = {
-  --   compilationDatabaseDirectory = "build";
-  --   index = {
-  --     threads = 0;
-  --   };
-  --   clang = {
-  --     excludeArgs = { "-frounding-math"} ;
-  --   };
-  -- }
--- }
-
-
 require'lspconfig'.sumneko_lua.setup {
   cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },  settings = {
     Lua = {
       runtime = {
         version = 'LuaJIT',
-        path = runtime_path,
+        path = vim.split(package.path, ";"),
       },
       diagnostics = {
         globals = {'vim'},
@@ -245,7 +251,13 @@ require'lspconfig'.rust_analyzer.setup(config({
         },
       },
     }))
-require'lspconfig'.jdtls.setup{}
+require'lspconfig'.jdtls.setup{
+  capabilities = capabilities,
+}
+
+-- require'lspconfig'.html.setup {
+--   capabilities = capabilities,
+-- }
 -- local servers = {'sumneko_lua', 'clangd', 'ccls', 'pylsp', 'pyright', 'tsserver'}
 
 -- for _, lsp in ipairs(servers) do
@@ -254,6 +266,7 @@ require'lspconfig'.jdtls.setup{}
 
 --lua/code_action_utils.lua
 local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls'}
+-- local servers = {'clangd' , 'jedi_language_server', 'tsserver', 'jdtls'}
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     capabilities = capabilities,
@@ -274,4 +287,3 @@ function M.code_action_listener()
 end
 
 return M
-

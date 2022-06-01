@@ -5,12 +5,14 @@ require('maps') -- basic remaps
 require('lsp') -- lsp clients config
 require'plugins-conf' -- minors plugins conf which don't deserve it's own file
 require'plugins_conf' -- plugins config directory
+require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"}}
 
 
 -- sets
 vim.cmd('set shiftwidth=4')
 vim.cmd('set tabstop=4')
 vim.cmd('set softtabstop=4')
+vim.cmd('set clipboard=unnamedplus')
 vim.wo.number = true
 vim.wo.relativenumber = true
 vim.wo.number = true
@@ -31,7 +33,7 @@ vim.o.smarttab = true
 vim.o.listchars = 'tab:┆·,trail:·,precedes:,extends:'
 --vim.cmd [[vim.opt undofile]] --save undo file
 vim.o.completeopt = "menuone,noselect"
-vim.o.showmode = false
+vim.o.showmode = true
 vim.o.incsearch = true
 vim.o.background = "dark"
 
@@ -68,4 +70,3 @@ call ColorMyPencils()
 vim.cmd([[
 autocmd CursorHold,CursorHoldI *.rs :lua require'lsp_extensions'.inlay_hints{ only_current_line = true }
 ]])
-require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"}}

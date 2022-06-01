@@ -17,6 +17,11 @@ vim.api.nvim_set_keymap('n', '<C-j>', '<C-w>j', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<C-k>', '<C-w>k', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<C-l>', '<C-w>l', {noremap = true, silent = true})
 
+vim.api.nvim_set_keymap('t', '<C-h>', '<C-w>h', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('t', '<C-j>', '<C-w>j', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('t', '<C-k>', '<C-w>k', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('t', '<C-l>', '<C-w>l', {noremap = true, silent = true})
+
 -- open terminal
 vim.api.nvim_set_keymap('n', '<leader>tb', ':split<CR>:resize 10<CR>:ter<CR>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>tv', ':vsplit<CR>:vertical resize - 20<CR>:ter<CR>', {noremap = true, silent = true})
@@ -62,3 +67,11 @@ vim.api.nvim_set_keymap('n', '<leader>dk', ':lua require"dap".up()<CR>zz', {nore
 vim.api.nvim_set_keymap('n', '<leader>dj', ':lua require"dap".down()<CR>zz', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>dr', ':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>de', ':lua require"dap".set_exception_breakpoints({"all"})<CR>', {noremap = true, silent = true})
+
+-- telescope
+vim.api.nvim_set_keymap("n", "<leader>f", "<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = false }))<cr>", {noremap = true, silent = true}
+)
+vim.api.nvim_set_keymap("n", "<leader>F", "<cmd>Telescope find_files<cr>", {noremap = true, silent = true})
+
+vim.api.nvim_set_keymap('n', '<leader>vv', '<A-v>', {noremap = true, silent = true})
+
