@@ -10,4 +10,3 @@
 * sumneko_lua
 * jedi
 * tsserver
-

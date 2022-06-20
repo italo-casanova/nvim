@@ -9,21 +9,37 @@ require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled
 
 
 -- sets
-vim.cmd('set shiftwidth=4')
-vim.cmd('set tabstop=4')
-vim.cmd('set softtabstop=4')
-vim.cmd('set clipboard=unnamedplus')
-vim.wo.number = true
-vim.wo.relativenumber = true
-vim.wo.number = true
-vim.o.clipboard = 'unnamedplus'
+--
+vim.opt.guicursor = ""
+vim.opt.relativenumber = true
+vim.opt.hlsearch = false
+vim.opt.hidden = true
+vim.opt.errorbells = false
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+vim.opt.nu = true
+vim.opt.wrap = false
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
+vim.opt.incsearch = true
+vim.opt.termguicolors = true
+vim.opt.scrolloff = 8
+vim.opt.isfname:append("@-@")
+vim.opt.cmdheight = 1
+vim.opt.updatetime = 50
+vim.opt.shortmess:append("c")
+vim.g.mapleader = " "
 vim.o.ruler = true
 vim.o.shell = "/bin/zsh" --make zzsh as a nvim default terminal shell
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.splitright = true
 vim.o.splitbelow = true
-vim.o.hidden = true
 vim.o.cursorline = true
 vim.o.autoindent = true
 vim.o.shiftwidth = 4
