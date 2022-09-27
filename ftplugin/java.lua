@@ -13,7 +13,7 @@ local config = {
     '-Dlog.protocol=true',
 	'-noverify',
 	'-Xmx1G',
-	'-jar', '/home/italo/.config/java-language-server/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar*',
+	'-jar', '/home/italo/.config/nvim/java-language-server/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
 	'-configuration', '/home/italo/.config/nvim/java-language-server/config_linux',
 	'-data', vim.fn.expand('~/.cache/jdtls-workspace') .. project_name,
   },

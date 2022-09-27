@@ -10,6 +10,7 @@ require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled
 
 -- sets
 --
+vim.cmd('set mouse=')
 vim.opt.guicursor = ""
 vim.opt.relativenumber = true
 vim.opt.hlsearch = false
@@ -33,6 +34,7 @@ vim.opt.isfname:append("@-@")
 vim.opt.cmdheight = 1
 vim.opt.updatetime = 50
 vim.opt.shortmess:append("c")
+vim.cmd("set clipboard+=unnamedplus")
 vim.g.mapleader = " "
 vim.o.ruler = true
 vim.o.shell = "/bin/zsh" --make zzsh as a nvim default terminal shell
@@ -47,7 +49,6 @@ vim.o.tabstop = 4
 vim.o.softtabstop = 4
 vim.o.smarttab = true
 vim.o.listchars = 'tab:┆·,trail:·,precedes:,extends:'
---vim.cmd [[vim.opt undofile]] --save undo file
 vim.o.completeopt = "menuone,noselect"
 vim.o.showmode = true
 vim.o.incsearch = true

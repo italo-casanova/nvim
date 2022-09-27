@@ -169,6 +169,11 @@ _G.packer_plugins = {
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/lush.nvim",
     url = "https://github.com/rktjmp/lush.nvim"
   },
+  ["markdown-preview.nvim"] = {
+    loaded = true,
+    path = "/home/italo/.local/share/nvim/site/pack/packer/start/markdown-preview.nvim",
+    url = "https://github.com/iamcco/markdown-preview.nvim"
+  },
   neoformat = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/neoformat",
@@ -203,11 +208,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/nvim-lua-guide",
     url = "https://github.com/nanotee/nvim-lua-guide"
-  },
-  ["nvim-markdown-preview"] = {
-    loaded = true,
-    path = "/home/italo/.local/share/nvim/site/pack/packer/start/nvim-markdown-preview",
-    url = "https://github.com/davidgranstrom/nvim-markdown-preview"
   },
   ["nvim-treesitter"] = {
     loaded = true,

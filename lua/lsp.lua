@@ -181,7 +181,8 @@ lspconfig.ccls.setup(config({
   }))
 
 require'lspconfig'.sumneko_lua.setup {
-  cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },  settings = {
+  cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
+  settings = {
     Lua = {
       runtime = {
         version = 'LuaJIT',
@@ -255,6 +256,8 @@ require'lspconfig'.jdtls.setup{
   capabilities = capabilities,
 }
 
+require'lspconfig'.vuels.setup{}
+
 -- require'lspconfig'.html.setup {
 --   capabilities = capabilities,
 -- }
@@ -265,7 +268,7 @@ require'lspconfig'.jdtls.setup{
 -- end
 
 --lua/code_action_utils.lua
-local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls'}
+local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls', 'vuels'}
 -- local servers = {'clangd' , 'jedi_language_server', 'tsserver', 'jdtls'}
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
