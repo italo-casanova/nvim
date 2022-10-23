@@ -45,7 +45,7 @@ end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -54,6 +54,8 @@ local has_words_before = function()
 
 local luasnip = require("luasnip")
 local cmp = require'cmp'
+
+require("luasnip.loaders.from_lua").load({path="~/.config/nvim/lua/plugins_conf/snippets"})
 
 require('lspkind').init()
 local source_mapping = {
@@ -74,7 +76,6 @@ cmp.setup({
 	snippet = {
 		expand = function(args)
 			require("luasnip").lsp_expand(args.body)
-
 		end,
 	},
     mapping = {
@@ -141,10 +142,10 @@ cmp.setup({
 
 	sources = {
 
-		{ name = "nvim_lsp" },
-        { name = "path" },
-        { name = "nvim_lua" },
         { name = "luasnip" },
+		{ name = "nvim_lsp" },
+        { name = "nvim_lua" },
+        { name = "path" },
 		{ name = "buffer" },
 	},
 })
@@ -216,9 +217,9 @@ _ = vim.cmd [[
     autocmd Filetype zsh lua require'cmp'.setup.buffer { sources = { { name = "zsh" }, } }
   augroup END
 ]]
+vim.cmd [[ autocmd BufRead,BufNewFile *.org set filetype=org ]]
 
--- require'lspconfig'.pylsp.setup{}
--- require('lspconfig').pyright.setup{config()}
+require('lspconfig').ltex.setup{}
 require("lspconfig").jedi_language_server.setup(config())
 require("lspconfig").cssls.setup{config()}
 require'lspconfig'.clangd.setup{
@@ -257,6 +258,8 @@ require'lspconfig'.jdtls.setup{
 }
 
 require'lspconfig'.vuels.setup{}
+require'lspconfig'.texlab.setup{}
+
 
 -- require'lspconfig'.html.setup {
 --   capabilities = capabilities,
@@ -268,7 +271,7 @@ require'lspconfig'.vuels.setup{}
 -- end
 
 --lua/code_action_utils.lua
-local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls', 'vuels'}
+local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab'}
 -- local servers = {'clangd' , 'jedi_language_server', 'tsserver', 'jdtls'}
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {

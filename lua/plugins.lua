@@ -39,7 +39,12 @@ return require('packer').startup(function(use)
 	use 'windwp/nvim-autopairs'
 	use "lukas-reineke/indent-blankline.nvim"
 	use 'ryanoasis/vim-devicons'
-	use 'tpope/vim-commentary'
+	use {
+    'numToStr/Comment.nvim',
+    config = function()
+        require('Comment').setup()
+    end
+	}
 	use 'frazrepo/vim-rainbow'
 	use 'tpope/vim-surround'
 	use 'rust-lang/rust.vim'
@@ -54,12 +59,8 @@ return require('packer').startup(function(use)
 	use 'tpope/vim-projectionist'
 	use 'tomlion/vim-solidity'
 	use 'ThePrimeagen/git-worktree.nvim'
-	use({
-		"iamcco/markdown-preview.nvim",
-		run = function() vim.fn["mkdp#util#install"]() end,
-	})
-
-	use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
+	use({ "iamcco/markdown-preview.nvim",
+		run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
 	use 'mfussenegger/nvim-jdtls'
 
 	-- telescope requirements...

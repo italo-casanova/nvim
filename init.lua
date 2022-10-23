@@ -52,7 +52,9 @@ vim.o.listchars = 'tab:┆·,trail:·,precedes:,extends:'
 vim.o.completeopt = "menuone,noselect"
 vim.o.showmode = true
 vim.o.incsearch = true
+vim.g.snippets = "luasnip"
 vim.o.background = "dark"
+vim.cmd [[ autocmd BufRead,BufNewFile *.org set filetype=org ]]
 
 vim.cmd([[
     let g:color_shceme = "gruvbox"
@@ -87,3 +89,4 @@ call ColorMyPencils()
 vim.cmd([[
 autocmd CursorHold,CursorHoldI *.rs :lua require'lsp_extensions'.inlay_hints{ only_current_line = true }
 ]])
+require'lspconfig'.ltex.setup{}
