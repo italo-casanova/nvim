@@ -3,14 +3,14 @@ require('plugins') -- plugins install
 require('commands') -- basic vim commands i still can't write in lua
 require('maps') -- basic remaps
 require('lsp') -- lsp clients config
-require'plugins-conf' -- minors plugins conf which don't deserve it's own file
-require'plugins_conf' -- plugins config directory
+require('plugins-conf') -- minors plugins conf which don't deserve it's own file
+require('plugins_conf') -- plugins config directory
 require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"}}
 
-
 -- sets
---
+
 vim.cmd('set mouse=')
+vim.cmd('set syntax=enable')
 vim.opt.guicursor = ""
 vim.opt.relativenumber = true
 vim.opt.hlsearch = false

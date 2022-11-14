@@ -8,6 +8,7 @@ local newline = function(text)
   return t { "", text }
 end
 
+
 ls.add_snippets("all", {
         s("head", {
                 t("#include<bits\\stdc++.h>"),

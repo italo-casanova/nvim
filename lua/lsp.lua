@@ -57,7 +57,7 @@ local cmp = require'cmp'
 
 require("luasnip.loaders.from_lua").load({path="~/.config/nvim/lua/plugins_conf/snippets"})
 
-require('lspkind').init()
+
 local source_mapping = {
     buffer = "[BUFF]",
     nvim_lsp = "[LSP]",
@@ -102,13 +102,6 @@ cmp.setup({
           end
         end,
       },
-
-      ["<tab>"] = cmp.config.disable,
-      ['<c-y>'] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Replace,
-        select = true,
-
-      },
     },
 
   window = {
@@ -122,6 +115,7 @@ cmp.setup({
 
   formatting = {
       format = lspkind.cmp_format {
+        mode = 'text_symbol',
         with_text = true,
         menu = {
           buffer = "[BUFF]",
@@ -143,8 +137,8 @@ cmp.setup({
 	sources = {
 
         { name = "luasnip" },
-		{ name = "nvim_lsp" },
         { name = "nvim_lua" },
+		{ name = "nvim_lsp" },
         { name = "path" },
 		{ name = "buffer" },
 	},
@@ -154,7 +148,7 @@ local function config(_config)
 	return vim.tbl_deep_extend("force", {
         on_attach = function ()
             Nnoremap("gd", ":lua vim.lsp.buf.definition()<CR>")
-			Nnoremap("K", ":lua vim.lsp.buf.hover()<CR>")
+			-- Nnoremap("K", ":lua vim.lsp.buf.hover()<CR>")
 			Nnoremap("<leader>vws", ":lua vim.lsp.buf.workspace_symbol()<CR>")
 			Nnoremap("<leader>vd", ":lua vim.diagnostic.open_float()<CR>")
 			Nnoremap("[d", ":lua vim.lsp.diagnostic.goto_next()<CR>")
@@ -178,6 +172,7 @@ lspconfig.ccls.setup(config({
     clang = {
       excludeArgs = { "-frounding-math"} ;
     };
+    offset_encoding = {"utf-8"}
   }
   }))
 
@@ -260,24 +255,20 @@ require'lspconfig'.jdtls.setup{
 require'lspconfig'.vuels.setup{}
 require'lspconfig'.texlab.setup{}
 
+require("lspconfig").clangd.setup({ capabilities = capabilities })
 
--- require'lspconfig'.html.setup {
---   capabilities = capabilities,
--- }
--- local servers = {'sumneko_lua', 'clangd', 'ccls', 'pylsp', 'pyright', 'tsserver'}
+require('lspkind').init()
 
--- for _, lsp in ipairs(servers) do
---   lspconfig[lsp].setup{capabilities = capabilities,}
--- end
 
---lua/code_action_utils.lua
+
 local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab'}
--- local servers = {'clangd' , 'jedi_language_server', 'tsserver', 'jdtls'}
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     capabilities = capabilities,
   }
 end
+
+
 
 local M = {}
 
@@ -293,3 +284,4 @@ function M.code_action_listener()
 end
 
 return M
+
