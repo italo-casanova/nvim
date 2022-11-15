@@ -8,7 +8,6 @@ require'nvim-treesitter.configs'.setup {
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = true,
     -- additional_vim_regex_highlighting = false,
-<<<<<<< HEAD
   },
 
   incremental_selection = {
@@ -19,8 +18,6 @@ require'nvim-treesitter.configs'.setup {
       scope_incremental = "grc",
       node_decremental = "grm",
     },
-=======
->>>>>>> refs/remotes/origin/master
   },
 
   rainbow = {
@@ -32,8 +29,6 @@ require'nvim-treesitter.configs'.setup {
   },
 
 }
-<<<<<<< HEAD
-=======
 
 local function bind(op, outer_opts)
     outer_opts = outer_opts or {noremap = true}
@@ -48,7 +43,6 @@ end
 
 local nnoremap = bind("n")
 
->>>>>>> refs/remotes/origin/master
 function ContextSetup(show_all_context)
     require("treesitter-context").setup({
         enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
@@ -84,12 +78,8 @@ function ContextSetup(show_all_context)
     })
 end
 
-<<<<<<< HEAD
 ContextSetup(true)
-=======
 nnoremap("<leader>cf", function() ContextSetup(true) end)
 nnoremap("<leader>cp", function() ContextSetup(false) end)
 ContextSetup(false)
-
 require"nvim-treesitter.highlight"
->>>>>>> refs/remotes/origin/master

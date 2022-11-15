@@ -253,7 +253,6 @@ require'lspconfig'.jdtls.setup{
 }
 
 require'lspconfig'.vuels.setup{}
-<<<<<<< HEAD
 
 vim.cmd [[ autocmd BufRead,BufNewFile *.org set filetype=org ]]
 require'lspconfig'.ltex.setup{}
@@ -263,23 +262,16 @@ require'lspconfig'.texlab.setup{}
 --   capabilities = capabilities,
 -- }
 -- local servers = {'sumneko_lua', 'clangd', 'ccls', 'pylsp', 'pyright', 'tsserver'}
-=======
 require'lspconfig'.texlab.setup{}
->>>>>>> refs/remotes/origin/master
 
 require("lspconfig").clangd.setup({ capabilities = capabilities })
 
-<<<<<<< HEAD
 --lua/code_action_utils.lua
 local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls', 'texlab', 'ltex', "jedi_language_server"}
 -- local servers = {'clangd' , 'jedi_language_server', 'tsserver', 'jdtls'}
-=======
 require('lspkind').init()
 
-
-
-local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab'}
->>>>>>> refs/remotes/origin/master
+-- local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab'}
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     capabilities = capabilities,
