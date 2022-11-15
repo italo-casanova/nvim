@@ -23,6 +23,7 @@ return require('packer').startup(function(use)
 	use 'hrsh7th/cmp-nvim-lsp'
 	use 'saadparwaiz1/cmp_luasnip'
 
+
 	-- Snippets
 	use 'L3MON4D3/LuaSnip'
 	use 'rafamadriz/friendly-snippets'
@@ -73,7 +74,11 @@ return require('packer').startup(function(use)
     use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
 
 	-- treesitter
-	use 'nvim-treesitter/nvim-treesitter'
+	use {
+		'nvim-treesitter/nvim-treesitter',
+		run = ":TSUpdate"
+	}
+	use 'nvim-treesitter/nvim-treesitter-context'
 	use 'p00f/nvim-ts-rainbow'
 
 	--status line
@@ -83,6 +88,9 @@ return require('packer').startup(function(use)
 	}
 	-- Harpoon
 	use 'mhinz/vim-rfc'
+
+	-- git
+	use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
 
 	-- Debug
 	use 'mfussenegger/nvim-dap'

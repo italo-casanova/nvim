@@ -7,7 +7,6 @@ require'plugins-conf' -- minors plugins conf which don't deserve it's own file
 require'plugins_conf' -- plugins config directory
 require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"}}
 
-
 -- sets
 --
 vim.opt.guicursor = ""

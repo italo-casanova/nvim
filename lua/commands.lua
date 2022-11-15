@@ -2,6 +2,7 @@ vim.cmd('set numberwidth=2')
 vim.cmd('let g:rainbow_active = 1')
 vim.cmd('set matchpairs+=<:>')
 vim.cmd('set guicursor=a:')
+vim.cmd('set clipboard+=unnamedplus')
 vim.cmd('autocmd TermOpen term://* startinsert')
 vim.cmd('let g:python_highlight_space_errors = 0')
 
@@ -57,3 +58,5 @@ vim.cmd([[
 endfun
 call ColorMyPencils()
     ]])
+
+vim.cmd('autocmd BufWritePost *.tex silent! execute "!pdflatex % >/dev/null 2>&1" | redraw!')

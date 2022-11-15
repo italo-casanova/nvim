@@ -45,7 +45,7 @@ end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -255,6 +255,12 @@ require'lspconfig'.jdtls.setup{
   capabilities = capabilities,
 }
 
+require'lspconfig'.vuels.setup{}
+
+vim.cmd [[ autocmd BufRead,BufNewFile *.org set filetype=org ]]
+require'lspconfig'.ltex.setup{}
+require'lspconfig'.texlab.setup{}
+
 -- require'lspconfig'.html.setup {
 --   capabilities = capabilities,
 -- }
@@ -265,7 +271,7 @@ require'lspconfig'.jdtls.setup{
 -- end
 
 --lua/code_action_utils.lua
-local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls'}
+local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls', 'texlab', 'ltex', "jedi_language_server"}
 -- local servers = {'clangd' , 'jedi_language_server', 'tsserver', 'jdtls'}
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
