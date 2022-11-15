@@ -74,6 +74,12 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
+  ["Comment.nvim"] = {
+    config = { "\27LJ\2\n5\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\fComment\frequire\0" },
+    loaded = true,
+    path = "/home/italo/.local/share/nvim/site/pack/packer/start/Comment.nvim",
+    url = "https://github.com/numToStr/Comment.nvim"
+  },
   ["DAPInstall.nvim"] = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/DAPInstall.nvim",
@@ -174,6 +180,13 @@ _G.packer_plugins = {
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/lush.nvim",
     url = "https://github.com/rktjmp/lush.nvim"
   },
+  ["markdown-preview.nvim"] = {
+    loaded = false,
+    needs_bufread = false,
+    only_cond = false,
+    path = "/home/italo/.local/share/nvim/site/pack/packer/opt/markdown-preview.nvim",
+    url = "https://github.com/iamcco/markdown-preview.nvim"
+  },
   neoformat = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/neoformat",
@@ -214,11 +227,6 @@ _G.packer_plugins = {
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/nvim-lua-guide",
     url = "https://github.com/nanotee/nvim-lua-guide"
   },
-  ["nvim-markdown-preview"] = {
-    loaded = true,
-    path = "/home/italo/.local/share/nvim/site/pack/packer/start/nvim-markdown-preview",
-    url = "https://github.com/davidgranstrom/nvim-markdown-preview"
-  },
   ["nvim-treesitter"] = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
@@ -243,6 +251,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/packer.nvim",
     url = "https://github.com/wbthomason/packer.nvim"
+  },
+  playground = {
+    loaded = true,
+    path = "/home/italo/.local/share/nvim/site/pack/packer/start/playground",
+    url = "https://github.com/nvim-treesitter/playground"
   },
   ["plenary.nvim"] = {
     loaded = true,
@@ -293,11 +306,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/vim-be-good",
     url = "https://github.com/theprimeagen/vim-be-good"
-  },
-  ["vim-commentary"] = {
-    loaded = true,
-    path = "/home/italo/.local/share/nvim/site/pack/packer/start/vim-commentary",
-    url = "https://github.com/tpope/vim-commentary"
   },
   ["vim-devicons"] = {
     loaded = true,
@@ -372,6 +380,24 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
+<<<<<<< HEAD
+=======
+-- Setup for: markdown-preview.nvim
+time([[Setup for markdown-preview.nvim]], true)
+try_loadstring("\27LJ\2\n=\0\0\2\0\4\0\0056\0\0\0009\0\1\0005\1\3\0=\1\2\0K\0\1\0\1\2\0\0\rmarkdown\19mkdp_filetypes\6g\bvim\0", "setup", "markdown-preview.nvim")
+time([[Setup for markdown-preview.nvim]], false)
+-- Config for: Comment.nvim
+time([[Config for Comment.nvim]], true)
+try_loadstring("\27LJ\2\n5\0\0\3\0\3\0\0066\0\0\0'\2\1\0B\0\2\0029\0\2\0B\0\1\1K\0\1\0\nsetup\fComment\frequire\0", "config", "Comment.nvim")
+time([[Config for Comment.nvim]], false)
+vim.cmd [[augroup packer_load_aucmds]]
+vim.cmd [[au!]]
+  -- Filetype lazy-loads
+time([[Defining lazy-load filetype autocommands]], true)
+vim.cmd [[au FileType markdown ++once lua require("packer.load")({'markdown-preview.nvim'}, { ft = "markdown" }, _G.packer_plugins)]]
+time([[Defining lazy-load filetype autocommands]], false)
+vim.cmd("augroup END")
+>>>>>>> refs/remotes/origin/master
 
 _G._packer.inside_compile = false
 if _G._packer.needs_bufread == true then

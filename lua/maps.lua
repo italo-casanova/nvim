@@ -75,3 +75,7 @@ vim.api.nvim_set_keymap("n", "<leader>F", "<cmd>Telescope find_files<cr>", {nore
 
 vim.api.nvim_set_keymap('n', '<leader>vv', '<A-v>', {noremap = true, silent = true})
 
+vim.api.nvim_set_keymap("n", "<leader><leader>s", "<cmd>source ~/.config/nvim/lua/plugins_conf/luaSnip.lua<CR>", {})
+
+vim.api.nvim_set_keymap("n", "<leader>cp", "<cmd>:! pdflatex %<CR><CR>", {noremap = true})
+vim.api.nvim_set_keymap("n", "<leader>rp", "<cmd>:! zathura $(echo %\\| sed 's/tex$/pdf/') & disown<CR><CR>", {noremap = true})

@@ -1,16 +1,14 @@
 require'nvim-treesitter.configs'.setup {
+  ensure_installed = "all",
   highlight = {
     enable = true,
-    custom_captures = {
-      -- Highlight the @foo.bar capture group with the "Identifier" highlight group.
-      ["foo.bar"] = "Identifier",
-    },
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` 'if' you depend on 'syntax' being enabled (like 'for' indentation).
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
     -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = true,
     -- additional_vim_regex_highlighting = false,
+<<<<<<< HEAD
   },
 
   incremental_selection = {
@@ -21,6 +19,8 @@ require'nvim-treesitter.configs'.setup {
       scope_incremental = "grc",
       node_decremental = "grm",
     },
+=======
+>>>>>>> refs/remotes/origin/master
   },
 
   rainbow = {
@@ -32,6 +32,23 @@ require'nvim-treesitter.configs'.setup {
   },
 
 }
+<<<<<<< HEAD
+=======
+
+local function bind(op, outer_opts)
+    outer_opts = outer_opts or {noremap = true}
+    return function(lhs, rhs, opts)
+        opts = vim.tbl_extend("force",
+            outer_opts,
+            opts or {}
+        )
+        vim.keymap.set(op, lhs, rhs, opts)
+    end
+end
+
+local nnoremap = bind("n")
+
+>>>>>>> refs/remotes/origin/master
 function ContextSetup(show_all_context)
     require("treesitter-context").setup({
         enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
@@ -67,4 +84,12 @@ function ContextSetup(show_all_context)
     })
 end
 
+<<<<<<< HEAD
 ContextSetup(true)
+=======
+nnoremap("<leader>cf", function() ContextSetup(true) end)
+nnoremap("<leader>cp", function() ContextSetup(false) end)
+ContextSetup(false)
+
+require"nvim-treesitter.highlight"
+>>>>>>> refs/remotes/origin/master

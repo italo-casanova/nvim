@@ -40,7 +40,12 @@ return require('packer').startup(function(use)
 	use 'windwp/nvim-autopairs'
 	use "lukas-reineke/indent-blankline.nvim"
 	use 'ryanoasis/vim-devicons'
-	use 'tpope/vim-commentary'
+	use {
+    'numToStr/Comment.nvim',
+    config = function()
+        require('Comment').setup()
+    end
+	}
 	use 'frazrepo/vim-rainbow'
 	use 'tpope/vim-surround'
 	use 'rust-lang/rust.vim'
@@ -55,7 +60,8 @@ return require('packer').startup(function(use)
 	use 'tpope/vim-projectionist'
 	use 'tomlion/vim-solidity'
 	use 'ThePrimeagen/git-worktree.nvim'
-	use 'davidgranstrom/nvim-markdown-preview'
+	use({ "iamcco/markdown-preview.nvim",
+		run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
 	use 'mfussenegger/nvim-jdtls'
 
 	-- telescope requirements...
@@ -74,12 +80,22 @@ return require('packer').startup(function(use)
     use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
 
 	-- treesitter
+<<<<<<< HEAD
 	use {
 		'nvim-treesitter/nvim-treesitter',
 		run = ":TSUpdate"
 	}
 	use 'nvim-treesitter/nvim-treesitter-context'
 	use 'p00f/nvim-ts-rainbow'
+=======
+    use("nvim-treesitter/nvim-treesitter", {
+        run = ":TSUpdate"
+    })
+
+    use("nvim-treesitter/playground")
+		use 'nvim-treesitter/nvim-treesitter-context'
+		use 'p00f/nvim-ts-rainbow'
+>>>>>>> refs/remotes/origin/master
 
 	--status line
 	use {

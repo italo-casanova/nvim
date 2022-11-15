@@ -55,7 +55,9 @@ local has_words_before = function()
 local luasnip = require("luasnip")
 local cmp = require'cmp'
 
-require('lspkind').init()
+require("luasnip.loaders.from_lua").load({path="~/.config/nvim/lua/plugins_conf/snippets"})
+
+
 local source_mapping = {
     buffer = "[BUFF]",
     nvim_lsp = "[LSP]",
@@ -74,7 +76,6 @@ cmp.setup({
 	snippet = {
 		expand = function(args)
 			require("luasnip").lsp_expand(args.body)
-
 		end,
 	},
     mapping = {
@@ -101,13 +102,6 @@ cmp.setup({
           end
         end,
       },
-
-      ["<tab>"] = cmp.config.disable,
-      ['<c-y>'] = cmp.mapping.confirm {
-        behavior = cmp.ConfirmBehavior.Replace,
-        select = true,
-
-      },
     },
 
   window = {
@@ -121,6 +115,7 @@ cmp.setup({
 
   formatting = {
       format = lspkind.cmp_format {
+        mode = 'text_symbol',
         with_text = true,
         menu = {
           buffer = "[BUFF]",
@@ -141,10 +136,10 @@ cmp.setup({
 
 	sources = {
 
+        { name = "luasnip" },
+        { name = "nvim_lua" },
 		{ name = "nvim_lsp" },
         { name = "path" },
-        { name = "nvim_lua" },
-        { name = "luasnip" },
 		{ name = "buffer" },
 	},
 })
@@ -153,7 +148,7 @@ local function config(_config)
 	return vim.tbl_deep_extend("force", {
         on_attach = function ()
             Nnoremap("gd", ":lua vim.lsp.buf.definition()<CR>")
-			Nnoremap("K", ":lua vim.lsp.buf.hover()<CR>")
+			-- Nnoremap("K", ":lua vim.lsp.buf.hover()<CR>")
 			Nnoremap("<leader>vws", ":lua vim.lsp.buf.workspace_symbol()<CR>")
 			Nnoremap("<leader>vd", ":lua vim.diagnostic.open_float()<CR>")
 			Nnoremap("[d", ":lua vim.lsp.diagnostic.goto_next()<CR>")
@@ -177,11 +172,13 @@ lspconfig.ccls.setup(config({
     clang = {
       excludeArgs = { "-frounding-math"} ;
     };
+    offset_encoding = {"utf-8"}
   }
   }))
 
 require'lspconfig'.sumneko_lua.setup {
-  cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },  settings = {
+  cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
+  settings = {
     Lua = {
       runtime = {
         version = 'LuaJIT',
@@ -215,9 +212,9 @@ _ = vim.cmd [[
     autocmd Filetype zsh lua require'cmp'.setup.buffer { sources = { { name = "zsh" }, } }
   augroup END
 ]]
+vim.cmd [[ autocmd BufRead,BufNewFile *.org set filetype=org ]]
 
--- require'lspconfig'.pylsp.setup{}
--- require('lspconfig').pyright.setup{config()}
+require('lspconfig').ltex.setup{}
 require("lspconfig").jedi_language_server.setup(config())
 require("lspconfig").cssls.setup{config()}
 require'lspconfig'.clangd.setup{
@@ -256,6 +253,7 @@ require'lspconfig'.jdtls.setup{
 }
 
 require'lspconfig'.vuels.setup{}
+<<<<<<< HEAD
 
 vim.cmd [[ autocmd BufRead,BufNewFile *.org set filetype=org ]]
 require'lspconfig'.ltex.setup{}
@@ -265,19 +263,30 @@ require'lspconfig'.texlab.setup{}
 --   capabilities = capabilities,
 -- }
 -- local servers = {'sumneko_lua', 'clangd', 'ccls', 'pylsp', 'pyright', 'tsserver'}
+=======
+require'lspconfig'.texlab.setup{}
+>>>>>>> refs/remotes/origin/master
 
--- for _, lsp in ipairs(servers) do
---   lspconfig[lsp].setup{capabilities = capabilities,}
--- end
+require("lspconfig").clangd.setup({ capabilities = capabilities })
 
+<<<<<<< HEAD
 --lua/code_action_utils.lua
 local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls', 'texlab', 'ltex', "jedi_language_server"}
 -- local servers = {'clangd' , 'jedi_language_server', 'tsserver', 'jdtls'}
+=======
+require('lspkind').init()
+
+
+
+local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab'}
+>>>>>>> refs/remotes/origin/master
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     capabilities = capabilities,
   }
 end
+
+
 
 local M = {}
 
@@ -293,3 +302,4 @@ function M.code_action_listener()
 end
 
 return M
+

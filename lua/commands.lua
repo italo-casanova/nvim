@@ -26,6 +26,8 @@ vim.cmd([[
     autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 40})
 augroup END ]])
 
+vim.cmd([[autocmd BufWritePost *.tex silent! execute "!pdflatex % >/dev/null 2>&1" | redraw!]])
+
 
 vim.cmd([[
     let g:theprimeagen_colorscheme = "gruvbox"
