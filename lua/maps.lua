@@ -1,3 +1,6 @@
+local ls = require"luasnip"
+-- local types = require"luasnip.util.types"
+--
 -- Set <space> as leader key
 vim.api.nvim_set_keymap('n', '<Space>', '<NOP>', { noremap = true, silent = true})
 vim.g.mapleader = ' '
@@ -42,7 +45,6 @@ vim.api.nvim_set_keymap('v', ',', '<gv', { noremap = true, silent = true})
 vim.api.nvim_set_keymap('v', '.', '>gv', { noremap = true, silent = true})
 
 -- show hover doc
-vim.api.nvim_set_keymap('n', 'L', ':Lspsaga hover_doc<CR>', { noremap = true, silent = true})
 
 vim.api.nvim_set_keymap('n', '<F8>', ':TagbarToggle<CR>', { noremap = true, silent = true})
 
@@ -79,3 +81,60 @@ vim.api.nvim_set_keymap("n", "<leader><leader>s", "<cmd>source ~/.config/nvim/lu
 
 vim.api.nvim_set_keymap("n", "<leader>cp", "<cmd>:! pdflatex %<CR><CR>", {noremap = true})
 vim.api.nvim_set_keymap("n", "<leader>rp", "<cmd>:! zathura $(echo %\\| sed 's/tex$/pdf/') & disown<CR><CR>", {noremap = true})
+
+local keymap = vim.api.nvim_set_keymap
+local opts = { noremap = true, silent = true }
+keymap("i", "<c-j>", "<cmd>lua require'luasnip'.jump(1)<CR>", opts)
+keymap("s", "<c-j>", "<cmd>lua require'luasnip'.jump(1)<CR>", opts)
+keymap("i", "<c-k>", "<cmd>lua require'luasnip'.jump(-1)<CR>", opts)
+keymap("s", "<c-k>", "<cmd>lua require'luasnip'.jump(-1)<CR>", opts)
+
+vim.keymap.set({"i", "s"}, "c-k", function()
+   if ls.expand_or_jumpable() then
+       ls.expand_or_jump()
+   end
+end, opts)
+
+vim.keymap.set({"i", "s"}, "c-j", function()
+   if ls.jumpable(-1) then
+       ls.jump(-1)
+   end
+end, opts)
+
+vim.keymap.set("i", "c-l", function ()
+   if ls.choice_active() then
+       ls.change_node(1)
+   end
+end, opts)
+
+local opts = { noremap = true, silent = true }
+local bufopts = { noremap=true, silent=true, buffer=bufnr}
+vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+vim.keymap.set('n', '<leader>bk', vim.lsp.buf.signature_help, bufopts)
+vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+vim.keymap.set('n', '<leader>wl', function()
+vim.keymap.set("n", "<leader>vws", function() vim.lsp.buf.workspace_symbol() end, opts)
+vim.keymap.set("n", "<leader>vd", function() vim.diagnostic.open_float() end, opts)
+vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
+vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
+ print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+end, bufopts)
+vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
+vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts)
+vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
+vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
+vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+
+
+vim.keymap.set('n', '<leader>l', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+vim.keymap.set('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+vim.keymap.set('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+vim.keymap.set('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+--
+vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+vim.keymap.set('n', '<leader>to', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)

@@ -1,3 +1,15 @@
+local ls = require("luasnip")
+-- some shorthands...
+local snip = ls.snippet
+local node = ls.snippet_node
+local text = ls.text_node
+local insert = ls.insert_node
+local func = ls.function_node
+local choice = ls.choice_node
+local dynamicn = ls.dynamic_node
+
+
+
 if vim.g.snippets ~= "luasnip" then
   return
 end
@@ -556,5 +568,6 @@ ls.add_snippets("all", {
 
 ls.filetype_extend("lua", { "c" }) -- in a cpp file: search c-snippets, then all-snippets only (no cpp-snippets!!).
 ls.filetype_set("cpp", { "c" })
+
 
 

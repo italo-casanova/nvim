@@ -13,7 +13,7 @@ return require('packer').startup(function(use)
 	use 'onsails/lspkind-nvim'
 	use 'nvim-lua/lsp_extensions.nvim'
 	use 'nvim-lua/lsp-status.nvim'
-	use 'glepnir/lspsaga.nvim'
+
 
 	-- cmp (completion)
 	use 'hrsh7th/nvim-cmp'
@@ -21,6 +21,7 @@ return require('packer').startup(function(use)
 	use 'hrsh7th/cmp-path'
 	use 'hrsh7th/cmp-nvim-lua'
 	use 'hrsh7th/cmp-nvim-lsp'
+
 	use 'saadparwaiz1/cmp_luasnip'
 
 	-- Snippets
@@ -75,9 +76,13 @@ return require('packer').startup(function(use)
 	use 'simrat39/symbols-outline.nvim'
 
 	-- Theme
-	use 'gruvbox-community/gruvbox'
-    use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
-
+	-- use 'gruvbox-community/gruvbox'
+	-- use 'luisiacc/gruvbox-baby'
+	-- use { "ellisonleao/gruvbox.nvim" }
+    -- use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
+	--
+	use({ 'rose-pine/neovim', as = 'rose-pine' })
+	-- use { "ellisonleao/gruvbox.nvim" }
 	-- treesitter
     use("nvim-treesitter/nvim-treesitter", {
         run = ":TSUpdate"
@@ -106,3 +111,4 @@ return require('packer').startup(function(use)
     require('packer').sync()
   end
 end)
+

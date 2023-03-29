@@ -1,4 +1,5 @@
 -- require modules
+require('snips') -- plugins config directory
 require('plugins') -- plugins install
 require('commands') -- basic vim commands i still can't write in lua
 require('maps') -- basic remaps
@@ -6,6 +7,7 @@ require('lsp') -- lsp clients config
 require('plugins-conf') -- minors plugins conf which don't deserve it's own file
 require('plugins_conf') -- plugins config directory
 require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"}}
+require("symbols-outline").setup()
 
 -- sets
 
@@ -24,8 +26,7 @@ vim.opt.smartindent = true
 vim.opt.nu = true
 vim.opt.wrap = false
 vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.backup = false vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 vim.opt.incsearch = true
 vim.opt.termguicolors = true
@@ -57,36 +58,31 @@ vim.o.background = "dark"
 vim.cmd [[ autocmd BufRead,BufNewFile *.org set filetype=org ]]
 
 vim.cmd([[
-    let g:color_shceme = "gruvbox"
-    fun! ColorMyPencils()
-    let g:gruvbox_contrast_dark = 'hard'
-    if exists('+termguicolors')
-        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-    endif
-    let g:gruvbox_invert_selection='0'
-
-    set background=dark
-    if has('nvim')
-        call luaeval('vim.cmd("colorscheme " .. _A[1])', [g:color_shceme])
-    else
-        colorscheme gruvbox
-    endif
-
-    highlight ColorColumn ctermbg=0 guibg=grey
-    hi SignColumn guibg=none
-    hi CursorLineNR guibg=None
-    highlight Normal guibg=none
-    " highlight LineNr guifg=#ff8659
-    " highlight LineNr guifg=#aed75f
-    highlight LineNr guifg=#5eacd3
-    highlight netrwDir guifg=#5eacd3
-    highlight qfFileName guifg=#aed75f
-    hi TelescopeBorder guifg=#5eacd
-endfun
-call ColorMyPencils()
-    ]])
-vim.cmd([[
 autocmd CursorHold,CursorHoldI *.rs :lua require'lsp_extensions'.inlay_hints{ only_current_line = true }
 ]])
 require'lspconfig'.ltex.setup{}
+
+require('rose-pine').setup({
+    disable_background = true,
+	highlight_groups = {
+		ColorColumn = { bg = 'rose' },
+
+		CursorLine = { bg = 'foam', blend = 10 },
+		-- StatusLine = { fg = 'love', bg = 'love', blend = 10 },
+	}
+
+})
+
+function ColorMyPencils(color)
+	color = color or "rose-pine"
+	vim.cmd.colorscheme(color)
+
+	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+
+end
+
+ColorMyPencils()
+-- vim.cmd([[
+-- 	autocmd CursorHold,CursorHoldI * lua require('lsp').code_action_listener()
+-- 	]])
