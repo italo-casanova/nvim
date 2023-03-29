@@ -285,7 +285,6 @@ require 'lspconfig'.jdtls.setup {
   on_attach = on_attach
 }
 
-<<<<<<< HEAD
 require 'lspconfig'.vuels.setup {
   capabilities = capabilities, on_attach = on_attach
 }
@@ -293,19 +292,14 @@ require 'lspconfig'.texlab.setup {
   capabilities = capabilities,
   on_attach = on_attach,
 }
-=======
-require'lspconfig'.vuels.setup{}
 
 vim.cmd [[ autocmd BufRead,BufNewFile *.org set filetype=org ]]
 require'lspconfig'.ltex.setup{}
-require'lspconfig'.texlab.setup{}
 
 -- require'lspconfig'.html.setup {
 --   capabilities = capabilities,
 -- }
 -- local servers = {'sumneko_lua', 'clangd', 'ccls', 'pylsp', 'pyright', 'tsserver'}
-require'lspconfig'.texlab.setup{}
->>>>>>> refs/remotes/origin/master
 
 require("lspconfig").clangd.setup({ capabilities = capabilities, on_attach = on_attach })
 require 'lspconfig'.eslint.setup {
