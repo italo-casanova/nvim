@@ -172,6 +172,11 @@ _G.packer_plugins = {
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/neoformat",
     url = "https://github.com/sbdchd/neoformat"
   },
+  neogit = {
+    loaded = true,
+    path = "/home/italo/.local/share/nvim/site/pack/packer/start/neogit",
+    url = "https://github.com/TimUntersberger/neogit"
+  },
   ["nvim-autopairs"] = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/nvim-autopairs",

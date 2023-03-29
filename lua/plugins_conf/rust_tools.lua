@@ -2,7 +2,7 @@ local opts = {
     tools = { -- rust-tools options
         autoSetHints = true,
 
-        hover_with_actions = true,
+        -- hover_with_actions = true,
 
         executor = require("rust-tools/executors").termopen,
 

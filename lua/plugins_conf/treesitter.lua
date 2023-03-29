@@ -10,6 +10,16 @@ require'nvim-treesitter.configs'.setup {
     -- additional_vim_regex_highlighting = false,
   },
 
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "gnn",
+      node_incremental = "grn",
+      scope_incremental = "grc",
+      node_decremental = "grm",
+    },
+  },
+
   rainbow = {
     enable = true,
     extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
@@ -68,8 +78,8 @@ function ContextSetup(show_all_context)
     })
 end
 
+ContextSetup(true)
 nnoremap("<leader>cf", function() ContextSetup(true) end)
 nnoremap("<leader>cp", function() ContextSetup(false) end)
 ContextSetup(false)
-
 require"nvim-treesitter.highlight"
