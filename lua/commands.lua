@@ -1,4 +1,4 @@
-vim.cmd('autocmd BufWritePre *.tsx,*.ts,*.jsx,*.js EslintFixAll')
+vim.cmd('autocmd BufWritePre *.tsx, *.ts, *.jsx, *.js EslintFixAll')
 vim.cmd('set numberwidth=2')
 vim.cmd('let g:rainbow_active = 1')
 vim.cmd('set matchpairs+=<:>')

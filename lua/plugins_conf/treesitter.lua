@@ -1,5 +1,11 @@
+require"nvim-treesitter.highlight"
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "all",
+  modules = {},
+  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "javascript", "vue", "latex", "java", "cpp", "typescript"},
+  sync_install = true,
+  auto_install = true,
+  ignore_install = {},
+
   highlight = {
     enable = true,
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
@@ -19,15 +25,35 @@ require'nvim-treesitter.configs'.setup {
       node_decremental = "grm",
     },
   },
+  -- rainbow = {
+  --   enable = true,
+  --   query = 'rainbow-parens',
+  --   -- Highlight the entire buffer all at once
+  --   strategy = require('ts-rainbow').strategy.global,
+  -- },
 
-  rainbow = {
-    enable = true,
-    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-    max_file_lines = nil, -- Do not enable 'for' files with more than n lines, int
-    -- colors = {}, -- table of hex strings
-    -- termcolors = {} -- table of colour name strings
-  },
+}
+-- This module contains a number of default definitions
+local rainbow_delimiters = require 'rainbow-delimiters'
 
+vim.g.rainbow_delimiters = {
+    strategy = {
+        [''] = rainbow_delimiters.strategy['global'],
+        vim = rainbow_delimiters.strategy['local'],
+    },
+    query = {
+        [''] = 'rainbow-delimiters',
+        lua = 'rainbow-blocks',
+    },
+    highlight = {
+        'RainbowDelimiterRed',
+        'RainbowDelimiterYellow',
+        'RainbowDelimiterBlue',
+        'RainbowDelimiterOrange',
+        'RainbowDelimiterGreen',
+        'RainbowDelimiterViolet',
+        'RainbowDelimiterCyan',
+    },
 }
 
 local function bind(op, outer_opts)
@@ -81,5 +107,3 @@ end
 ContextSetup(true)
 nnoremap("<leader>cf", function() ContextSetup(true) end)
 nnoremap("<leader>cp", function() ContextSetup(false) end)
-ContextSetup(false)
-require"nvim-treesitter.highlight"

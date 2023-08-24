@@ -34,9 +34,9 @@ return require('packer').startup(function(use)
     use 'nanotee/nvim-lua-guide'
 
 	-- Syntax
-	use 'sheerun/vim-polyglot'
 	use 'sbdchd/neoformat'
 	use 'simrat39/rust-tools.nvim'
+
 	-- Utils
 	use 'windwp/nvim-autopairs'
 	use "lukas-reineke/indent-blankline.nvim"
@@ -47,7 +47,7 @@ return require('packer').startup(function(use)
         require('Comment').setup()
     end
 	}
-	use 'frazrepo/vim-rainbow'
+	-- use 'frazrepo/vim-rainbow'
 	use 'tpope/vim-surround'
 	use 'rust-lang/rust.vim'
 	use 'darrikonn/vim-gofmt'
@@ -86,7 +86,8 @@ return require('packer').startup(function(use)
 	-- use { "ellisonleao/gruvbox.nvim" }
 	-- treesitter
 	use 'nvim-treesitter/nvim-treesitter-context'
-	use 'p00f/nvim-ts-rainbow'
+	-- use 'p00f/nvim-ts-rainbow'
+	use 'HiPhish/rainbow-delimiters.nvim'
 	use("nvim-treesitter/nvim-treesitter", {
 			run = ":TSUpdate"
 	})
@@ -99,9 +100,8 @@ return require('packer').startup(function(use)
 	}
 	-- Harpoon
 	use 'mhinz/vim-rfc'
-
-	-- git
-	use { 'TimUntersberger/neogit', requires = 'nvim-lua/plenary.nvim' }
+	use("theprimeagen/harpoon")
+	use("theprimeagen/refactoring.nvim")
 
 	-- Debug
 	use 'mfussenegger/nvim-dap'

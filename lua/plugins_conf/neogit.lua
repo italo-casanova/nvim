@@ -1,21 +1,30 @@
-local neogit = require('neogit')
-local function bind(op, outer_opts)
-    outer_opts = outer_opts or {noremap = true}
-    return function(lhs, rhs, opts)
-        opts = vim.tbl_extend("force",
-            outer_opts,
-            opts or {}
-        )
-        vim.keymap.set(op, lhs, rhs, opts)
-    end
-end
+vim.keymap.set("n", "<leader>gs", vim.cmd.Git)
 
-local nnoremap = bind("n")
+local Fugitive_Group = vim.api.nvim_create_augroup("Fugitive_Group", {})
 
-neogit.setup {}
+local autocmd = vim.api.nvim_create_autocmd
+autocmd("BufWinEnter", {
+    group = Fugitive_Group,
+    pattern = "*",
+    callback = function()
+        if vim.bo.ft ~= "fugitive" then
+            return
+        end
 
-nnoremap("<leader>gs", function()
-    neogit.open({ })
-end);
+        local bufnr = vim.api.nvim_get_current_buf()
+        local opts = {buffer = bufnr, remap = false}
+        vim.keymap.set("n", "<leader>p", function()
+            vim.cmd.Git('push')
+        end, opts)
 
-nnoremap("<leader>ga", "<cmd>!git fetch --all<CR>");
+        -- rebase always
+        vim.keymap.set("n", "<leader>P", function()
+            vim.cmd.Git({'pull',  '--rebase'})
+        end, opts)
+
+        -- NOTE: It allows me to easily set the branch i am pushing and any tracking
+        -- needed if i did not set the branch up correctly
+        vim.keymap.set("n", "<leader>t", ":Git push -u origin ", opts);
+    end,
+})
+

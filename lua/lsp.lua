@@ -22,6 +22,35 @@ end
 local sumneko_root_path = "/home/italo/.config/nvim/lua-language-server"
 local sumneko_binary = sumneko_root_path .. "/bin/lua-language-server"
 
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(ev)
+    -- Enable completion triggered by <c-x><c-o>
+    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+    -- Buffer local mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    local opts = { buffer = ev.buf }
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
+    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
+    vim.keymap.set('n', '<space>wl', function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, opts)
+    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
+    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
+    vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    vim.keymap.set('n', '<space>f', function()
+      vim.lsp.buf.format { async = true }
+    end, opts)
+  end,
+})
+
 local lspconfig = require 'lspconfig'
 local on_attach = function(_, bufnr)
   vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -230,10 +259,13 @@ require('lspconfig').ltex.setup {
   capabilities = capabilities,
   on_attach = on_attach
 }
-require("lspconfig").jedi_language_server.setup({
-  capabilities = capabilities,
-  on_attach = on_attach
-})
+
+require'lspconfig'.jedi_language_server.setup{}
+-- require("lspconfig").jedi_language_server.setup({
+--   capabilities = capabilities,
+--   on_attach = on_attach,
+--   filetype = {"python"},
+-- })
 require("lspconfig").cssls.setup({
   capabilities = capabilities,
   on_attach = on_attach
@@ -262,24 +294,17 @@ require 'lspconfig'.tsserver.setup({
     ts_utils.setup_client(client)
   end,
 })
--- require'lspconfig'.rust_analyzer.setup({
--- 	cmd = { "rustup", "run", "nightly", "rust-analyzer" },
---     capabilities = capabilities,
---     on_attach = on_attach,
---     settings = {
---       ["rust-analyzer"] = {
---     --     checkOnSave = {
---     --       command = "clippy"
---     --       },
---     --       assist = {
---     --         importGranularity = "module",
---     --         importPrefix = "by_self",
---     --       },
---           cargo = {loadOutDirsFromCheck = true},
---           procMacro = {enable = true},
---         },
---       },
---     })
+require'lspconfig'.rust_analyzer.setup({
+	cmd = { "rustup", "run", "nightly", "rust-analyzer" },
+    capabilities = capabilities,
+    on_attach = on_attach,
+    settings = {
+        diagnostics = {
+        enable = false;
+        },
+      },
+    root_dir = lspconfig.util.root_pattern("Cargo.toml", "rust-project.json", ".git"),
+    })
 require 'lspconfig'.jdtls.setup {
   capabilities = capabilities,
   on_attach = on_attach
@@ -294,7 +319,7 @@ require 'lspconfig'.texlab.setup {
 }
 
 vim.cmd [[ autocmd BufRead,BufNewFile *.org set filetype=org ]]
-require'lspconfig'.ltex.setup{}
+-- require'lspconfig'.ltex.setup{}
 
 -- require'lspconfig'.html.setup {
 --   capabilities = capabilities,
@@ -317,10 +342,21 @@ require 'lspconfig'.eslint.setup {
 -- local servers = {'clangd' , 'jedi_language_server', 'tsserver', 'jdtls'}
 require('lspkind').init()
 
+local lsp_util = vim.lsp.util
+
+
+require'lspconfig'.gopls.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+    cmd = {"gopls"},
+    filetypes = { "go", "gomod", "gotmtl" },
+    root_dir = lspconfig.util.root_pattern(".git", "go.mod", ".git"),
+}
+
 
 
 -- local servers = { 'ccls', 'clangd', 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab', 'eslint' }
-local servers = { 'clangd', 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab', 'eslint' }
+local servers = { 'clangd', 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab', 'eslint' , 'rust_analyzer'}
 -- local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab'}
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
@@ -332,7 +368,6 @@ end
 
 local M = {}
 
-local lsp_util = vim.lsp.util
 
 function M.code_action_listener()
   local context = { diagnostics = vim.lsp.diagnostic.get_line_diagnostics() }

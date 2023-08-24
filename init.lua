@@ -1,4 +1,4 @@
--- require modules
+	-- require modules
 require('snips') -- plugins config directory
 require('plugins') -- plugins install
 require('commands') -- basic vim commands i still can't write in lua
@@ -8,11 +8,11 @@ require('plugins-conf') -- minors plugins conf which don't deserve it's own file
 require('plugins_conf') -- plugins config directory
 require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"}}
 require("symbols-outline").setup()
-
 -- sets
-
 vim.cmd('set mouse=')
 vim.cmd('set syntax=enable')
+vim.cmd('set autochdir')
+vim.cmd('set browsedir=current')
 vim.opt.guicursor = ""
 vim.opt.relativenumber = true
 vim.opt.hlsearch = false
@@ -60,7 +60,6 @@ vim.cmd [[ autocmd BufRead,BufNewFile *.org set filetype=org ]]
 vim.cmd([[
 autocmd CursorHold,CursorHoldI *.rs :lua require'lsp_extensions'.inlay_hints{ only_current_line = true }
 ]])
-require'lspconfig'.ltex.setup{}
 
 require('rose-pine').setup({
     disable_background = true,
@@ -86,3 +85,4 @@ ColorMyPencils()
 -- vim.cmd([[
 -- 	autocmd CursorHold,CursorHoldI * lua require('lsp').code_action_listener()
 -- 	]])
+-- This module contains a number of default definitions
