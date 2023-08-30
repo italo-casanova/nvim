@@ -33,7 +33,7 @@ vim.api.nvim_set_keymap('n', '<C-t>', ':tabnew<CR>:terminal<CR>', {noremap = tru
 
 vim.api.nvim_set_keymap('n', '<leader>tn', ':tabnew<CR>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>gcc', ':w<CR>:!g++ -o  %:r % -std=c++17<Enter>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>p', ':w<CR>:!python3 %<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>py', ':w<CR>:!python3 %<CR>', {noremap = true, silent = true})
 
 
 -- resize buffer
