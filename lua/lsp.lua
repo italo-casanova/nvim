@@ -336,6 +336,8 @@ require 'lspconfig'.eslint.setup {
       command = "EslintFixAll",
     })
   end,
+  root_dir = lspconfig.util.root_pattern(".git"),
+
 }
 
 --lua/code_action_utils.lua
