@@ -107,6 +107,7 @@ return require('packer').startup(function(use)
 	use 'mfussenegger/nvim-dap'
 	use 'Pocco81/DAPInstall.nvim'
 	use 'szw/vim-maximizer'
+    use 'github/copilot.vim'
 
 
 
