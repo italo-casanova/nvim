@@ -12,8 +12,6 @@ require("symbols-outline").setup()
 -- sets
 vim.cmd('set mouse=')
 vim.cmd('set syntax=enable')
-vim.cmd('set autochdir')
-vim.cmd('set browsedir=current')
 vim.opt.guicursor = ""
 vim.opt.relativenumber = true
 vim.opt.hlsearch = false

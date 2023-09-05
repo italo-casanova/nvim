@@ -70,14 +70,6 @@ vim.api.nvim_set_keymap('n', '<leader>dj', ':lua require"dap".down()<CR>zz', {no
 vim.api.nvim_set_keymap('n', '<leader>dr', ':lua require"dap".repl.toggle({}, "vsplit")<CR><C-w>l', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>de', ':lua require"dap".set_exception_breakpoints({"all"})<CR>', {noremap = true, silent = true})
 
--- telescope
-vim.api.nvim_set_keymap("n", "<leader>f", "<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = false }))<cr>", {noremap = true, silent = true}
-)
-vim.api.nvim_set_keymap("n", "<leader>F", "<cmd>Telescope find_files<cr>", {noremap = true, silent = true})
-
-vim.api.nvim_set_keymap('n', '<leader>vv', '<A-v>', {noremap = true, silent = true})
-
-vim.api.nvim_set_keymap("n", "<leader><leader>s", "<cmd>source ~/.config/nvim/lua/plugins_conf/luaSnip.lua<CR>", {})
 
 vim.api.nvim_set_keymap("n", "<leader>cp", "<cmd>:! pdflatex %<CR><CR>", {noremap = true})
 vim.api.nvim_set_keymap("n", "<leader>rp", "<cmd>:! zathura $(echo %\\| sed 's/tex$/pdf/') & disown<CR><CR>", {noremap = true})
