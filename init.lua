@@ -1,13 +1,15 @@
 -- require modules
-require('snips') -- plugins config directory
 require('plugins') -- plugins install
+require('plugins-conf') -- minors plugins conf which don't deserve it's own file
+require('plugins_conf') -- plugins config directory
 require('commands') -- basic vim commands i still can't write in lua
 require('maps') -- basic remaps
 require('lsp') -- lsp clients config
-require('plugins-conf') -- minors plugins conf which don't deserve it's own file
-require('plugins_conf') -- plugins config directory
+require('snips') -- plugins config directory
 require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"}}
 require("symbols-outline").setup()
+
+
 
 -- sets
 vim.cmd('set mouse=')
