@@ -7,7 +7,6 @@ autocmd("BufWinEnter", {
     group = Fugitive,
     pattern = "*",
     callback = function()
-        print("help", vim.bo.ft)
         if vim.bo.ft ~= "fugitive" then
             return
         end

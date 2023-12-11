@@ -6,7 +6,7 @@ vim.cmd([[
     endfun
 
 
-    augroup THE_PRIMEAGEN_LSP
+    augroup LSO
       autocmd!
       autocmd! BufWrite,BufEnter,InsertLeave * :call LspLocationList()
     augroup END

@@ -113,7 +113,7 @@ return require('packer').startup(function(use)
 	use 'szw/vim-maximizer'
     use 'github/copilot.vim'
 
-    use("github/copilot.vim")
+    use("laytan/cloak.nvim")
 
 
 

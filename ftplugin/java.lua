@@ -18,8 +18,8 @@ local config = {
 	'-data', vim.fn.expand('~/.cache/jdtls-workspace') .. project_name,
   },
 
-  root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'}),
-
+  -- root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'}),
+  root_dir = vim.fs.dirname(vim.fs.find({'gradlew', '.git', 'mvnw'}, { upward = true })[1]),
   settings = {
     java = {
     }
@@ -59,4 +59,5 @@ vim.api.nvim_set_keymap("v", "<leader>dm", "<Esc><Cmd>lua require('jdtls').extra
 
 vim.api.nvim_set_keymap("n", "<leader>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
+require('jdtls').start_or_attach(config)
 require('jdtls').start_or_attach(config)
