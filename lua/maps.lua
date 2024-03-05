@@ -1,6 +1,5 @@
 local ls = require"luasnip"
--- local types = require"luasnip.util.types"
---
+
 -- Set <space> as leader key
 vim.api.nvim_set_keymap('n', '<Space>', '<NOP>', { noremap = true, silent = true})
 vim.g.mapleader = ' '
@@ -33,7 +32,7 @@ vim.api.nvim_set_keymap('n', '<C-t>', ':tabnew<CR>:terminal<CR>', {noremap = tru
 
 vim.api.nvim_set_keymap('n', '<leader>tn', ':tabnew<CR>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>gcc', ':w<CR>:!g++ -o  %:r % -std=c++17<Enter>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', '<leader>py', ':w<CR>:!python3 %<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>rp', ':w<CR>:!python3 %<CR>', {noremap = true, silent = true})
 
 
 -- resize buffer
@@ -72,7 +71,7 @@ vim.api.nvim_set_keymap('n', '<leader>de', ':lua require"dap".set_exception_brea
 
 
 vim.api.nvim_set_keymap("n", "<leader>cp", "<cmd>:! pdflatex %<CR><CR>", {noremap = true})
-vim.api.nvim_set_keymap("n", "<leader>rp", "<cmd>:! zathura $(echo %\\| sed 's/tex$/pdf/') & disown<CR><CR>", {noremap = true})
+-- vim.api.nvim_set_keymap("n", "<leader>rp", "<cmd>:! zathura $(echo %\\| sed 's/tex$/pdf/') & disown<CR><CR>", {noremap = true})
 
 local keymap = vim.api.nvim_set_keymap
 local opts = { noremap = true, silent = true }
@@ -138,3 +137,7 @@ vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
 
 vim.keymap.set('n', '<leader>to', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
 
+
+vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+vim.api.nvim_set_keymap("i", "<C-H>", 'copilot#Previous()', { silent = true, expr = true })
+vim.api.nvim_set_keymap("i", "<C-K>", 'copilot#Next()', { silent = true, expr = true })

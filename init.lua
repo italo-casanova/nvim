@@ -7,8 +7,8 @@ require('plugins_conf') -- plugins config directory
 require('lsp') -- lsp clients config
 require('snips') -- plugins config directory
 require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"}}
+require('plugins')      -- plugins install
 require("symbols-outline").setup()
-
 
 
 -- sets
@@ -27,7 +27,8 @@ vim.opt.smartindent = true
 vim.opt.nu = true
 vim.opt.wrap = false
 vim.opt.swapfile = false
-vim.opt.backup = false vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.backup = false
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 vim.opt.incsearch = true
 vim.opt.termguicolors = true
@@ -56,6 +57,7 @@ vim.o.showmode = true
 vim.o.incsearch = true
 vim.g.snippets = "luasnip"
 vim.o.background = "dark"
+vim.g.copilot_no_tab_map = true
 vim.cmd [[ autocmd BufRead,BufNewFile *.org set filetype=org ]]
 
 vim.cmd([[
@@ -64,22 +66,21 @@ autocmd CursorHold,CursorHoldI *.rs :lua require'lsp_extensions'.inlay_hints{ on
 
 require('rose-pine').setup({
     disable_background = true,
-	highlight_groups = {
-		ColorColumn = { bg = 'rose' },
+    highlight_groups = {
+        ColorColumn = { bg = 'rose' },
 
-		CursorLine = { bg = 'foam', blend = 10 },
-		-- StatusLine = { fg = 'love', bg = 'love', blend = 10 },
-	}
+        CursorLine = { bg = 'foam', blend = 10 },
+        -- StatusLine = { fg = 'love', bg = 'love', blend = 10 },
+    }
 
 })
 
 function ColorMyPencils(color)
-	color = color or "rose-pine"
-	vim.cmd.colorscheme(color)
+    color = color or "rose-pine"
+    vim.cmd.colorscheme(color)
 
-	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-
+    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
 ColorMyPencils()

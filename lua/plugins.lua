@@ -27,6 +27,7 @@ return require('packer').startup(function(use)
 	use 'hrsh7th/cmp-path'
 	use 'hrsh7th/cmp-nvim-lua'
 	use 'hrsh7th/cmp-nvim-lsp'
+    use 'Decodetalkers/csharpls-extended-lsp.nvim'
 
 	use 'saadparwaiz1/cmp_luasnip'
 
@@ -74,9 +75,13 @@ return require('packer').startup(function(use)
 	-- telescope requirements...
 	use 'nvim-lua/popup.nvim'
 	use 'nvim-lua/plenary.nvim'
-	use 'nvim-telescope/telescope.nvim'
 	use 'nvim-telescope/telescope-fzy-native.nvim'
 	use "nvim-telescope/telescope-media-files.nvim"
+    use {
+      'nvim-telescope/telescope.nvim', tag = '0.1.5',
+    -- or                            , branch = '0.1.x',
+      requires = { {'nvim-lua/plenary.nvim'} }
+    }
 
 	-- Icons
 	use 'kyazdani42/nvim-web-devicons'
@@ -113,7 +118,6 @@ return require('packer').startup(function(use)
 	use 'mfussenegger/nvim-dap'
 	use 'Pocco81/DAPInstall.nvim'
 	use 'szw/vim-maximizer'
-    use 'github/copilot.vim'
 
     use("laytan/cloak.nvim")
 
