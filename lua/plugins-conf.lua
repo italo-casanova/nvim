@@ -5,8 +5,9 @@
 --     buftype_exclude = {"terminal"}
 -- }
 --
-require("ibl").setup {}
+require("ibl").setup(
 
+)
 require('nvim-autopairs').setup{}
 
 if vim.g.snippets ~= "luasnip" or not pcall(require, "luasnip") then
