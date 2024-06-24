@@ -8,7 +8,7 @@ require('lsp') -- lsp clients config
 require('snips') -- plugins config directory
 require'lsp_extensions'.inlay_hints{ prefix = '', highlight = "Comment", enabled = {"TypeHint", "ChainingHint", "ParameterHint"}}
 require('plugins')      -- plugins install
-require("symbols-outline").setup()
+require("outline").setup({})
 
 
 -- sets
