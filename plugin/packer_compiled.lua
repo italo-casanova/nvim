@@ -49,8 +49,13 @@ local function save_profiles(threshold)
 end
 
 time([[Luarocks path setup]], true)
+<<<<<<< HEAD
 local package_path_str = "/home/italo/.cache/nvim/packer_hererocks/2.1.1702233742/share/lua/5.1/?.lua;/home/italo/.cache/nvim/packer_hererocks/2.1.1702233742/share/lua/5.1/?/init.lua;/home/italo/.cache/nvim/packer_hererocks/2.1.1702233742/lib/luarocks/rocks-5.1/?.lua;/home/italo/.cache/nvim/packer_hererocks/2.1.1702233742/lib/luarocks/rocks-5.1/?/init.lua"
 local install_cpath_pattern = "/home/italo/.cache/nvim/packer_hererocks/2.1.1702233742/lib/lua/5.1/?.so"
+=======
+local package_path_str = "/home/italo/.cache/nvim/packer_hererocks/2.1.1716656478/share/lua/5.1/?.lua;/home/italo/.cache/nvim/packer_hererocks/2.1.1716656478/share/lua/5.1/?/init.lua;/home/italo/.cache/nvim/packer_hererocks/2.1.1716656478/lib/luarocks/rocks-5.1/?.lua;/home/italo/.cache/nvim/packer_hererocks/2.1.1716656478/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/home/italo/.cache/nvim/packer_hererocks/2.1.1716656478/lib/lua/5.1/?.so"
+>>>>>>> refs/remotes/origin/master
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -94,6 +99,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/italo/.local/share/nvim/site/pack/packer/start/black",
     url = "https://github.com/ambv/black"
+  },
+  ["cloak.nvim"] = {
+    loaded = true,
+    path = "/home/italo/.local/share/nvim/site/pack/packer/start/cloak.nvim",
+    url = "https://github.com/laytan/cloak.nvim"
   },
   ["cmp-buffer"] = {
     loaded = true,

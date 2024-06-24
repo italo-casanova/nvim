@@ -48,6 +48,7 @@ return require('packer').startup(function(use)
 	use 'windwp/nvim-autopairs'
 	use "lukas-reineke/indent-blankline.nvim"
 	use 'ryanoasis/vim-devicons'
+    use "github/copilot.vim"
 	use {
     'numToStr/Comment.nvim',
     config = function()
@@ -86,7 +87,7 @@ return require('packer').startup(function(use)
 	-- Icons
 	use 'kyazdani42/nvim-web-devicons'
 	-- use 'simrat39/symbols-outline.nvim'
-    use 'hedyhli/outline.nvim'
+	use 'hedyhli/outline.nvim'
 
 	-- Theme
 	-- use 'gruvbox-community/gruvbox'
@@ -120,7 +121,7 @@ return require('packer').startup(function(use)
 	use 'Pocco81/DAPInstall.nvim'
 	use 'szw/vim-maximizer'
 
-    use("github/copilot.vim")
+    use("laytan/cloak.nvim")
 
 
 

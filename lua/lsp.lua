@@ -11,14 +11,6 @@ end
 Nnoremap = CreateNoremap("n", { noremap = true, silent = true })
 Inoremap = CreateNoremap("i", { noremap = true, silent = true })
 
-function CreateNoremap(type, opts)
-    return function(lhs, rhs, bufnr)
-        bufnr = bufnr or 0
-        vim.keymap.set(bufnr, type, lhs, rhs, opts)
-    end
-end
-
--- sumneku-lua local runtime_path = vim.split(package.path, ';')
 local sumneko_root_path = "/home/italo/.config/nvim/lua-language-server"
 local sumneko_binary = sumneko_root_path .. "/bin/lua-language-server"
 
@@ -324,9 +316,17 @@ require 'lspconfig'.jdtls.setup {
     on_attach = on_attach
 }
 
-require 'lspconfig'.vuels.setup {
-    capabilities = capabilities, on_attach = on_attach
+require 'lspconfig'.volar.setup {
+  filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'},
+  capabilities = capabilities, on_attach = on_attach
+
 }
+
+require 'lspconfig'.vuels.setup {
+  filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'},
+  capabilities = capabilities, on_attach = on_attach
+}
+
 require 'lspconfig'.texlab.setup {
     capabilities = capabilities,
     on_attach = on_attach,
