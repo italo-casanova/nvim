@@ -71,7 +71,12 @@
         "/home/italo/.local/share/nvim/site/pack/packer/start/rust.vim/after",
         "${3rd}/skynet/library",
         "${3rd}/OpenResty/library",
-        "${3rd}/love2d/library"
+        "${3rd}/love2d/library",
+        "${3rd}/luv/library",
+        "${3rd}/lovr/library",
+        "${3rd}/luassert/library",
+        "${3rd}/bee/library",
+        "${3rd}/Jass/library"
     ],
     "diagnostics.globals": [
         "vim",
@@ -79,5 +84,6 @@
     ],
     "runtime.special": {
         "love.filesystem.load": "loadfile"
-    }
+    },
+    "runtime.version": "Lua 5.3"
 }

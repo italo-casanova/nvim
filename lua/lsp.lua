@@ -300,11 +300,11 @@ local rust_capabilities = capabilities
 
 rust_capabilities.codeAction = {
 
-      codeActionLiteralSupport = {
+    codeActionLiteralSupport = {
         codeActionKind = {
-          valueSet = { "quickfix", "refactor", "refactor.extract", "refactor.inline", "refactor.rewrite", "source", "source.organizeImports" }
+            valueSet = { "quickfix", "refactor", "refactor.extract", "refactor.inline", "refactor.rewrite", "source", "source.organizeImports" }
         }
-      }
+    }
 }
 require 'lspconfig'.rust_analyzer.setup({
     cmd = { "rustup", "run", "nightly", "rust-analyzer" },
@@ -373,11 +373,29 @@ require 'lspconfig'.csharp_ls.setup {
     capabilities = capabilities,
 }
 
+require 'lspconfig'.dockerls.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+}
+
+require 'lspconfig'.docker_compose_language_service.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+}
+require'lspconfig'.solidity_ls_nomicfoundation.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+}
+require'lspconfig'.solidity_ls.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+}
 
 
 -- local servers = { 'ccls', 'clangd', 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab', 'eslint' }
 local servers = { 'clangd', 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab', 'eslint',
-    'rust_analyzer', 'csharp_ls' }
+    'rust_analyzer', 'csharp_ls', 'docker_compose_language_service', 'dockerls', 'solidity_ls_nomicfoundation',
+    'solidity_ls'}
 -- local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab'}
 for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup {

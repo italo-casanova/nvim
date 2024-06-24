@@ -85,7 +85,8 @@ return require('packer').startup(function(use)
 
 	-- Icons
 	use 'kyazdani42/nvim-web-devicons'
-	use 'simrat39/symbols-outline.nvim'
+	-- use 'simrat39/symbols-outline.nvim'
+    use 'hedyhli/outline.nvim'
 
 	-- Theme
 	-- use 'gruvbox-community/gruvbox'
