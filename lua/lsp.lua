@@ -253,12 +253,12 @@ require('lspconfig').ltex.setup {
     on_attach = on_attach
 }
 
-require 'lspconfig'.jedi_language_server.setup {}
--- require("lspconfig").jedi_language_server.setup({
---   capabilities = capabilities,
---   on_attach = on_attach,
---   filetype = {"python"},
--- })
+-- require 'lspconfig'.jedi_language_server.setup {}
+require("lspconfig").jedi_language_server.setup({
+  capabilities = capabilities,
+  on_attach = on_attach,
+  filetype = {"python"},
+})
 require("lspconfig").cssls.setup({
     capabilities = capabilities,
     on_attach = on_attach
@@ -276,15 +276,10 @@ require 'lspconfig'.clangd.setup {
     capabilities = capabilities,
     on_attach = on_attach
 }
-require 'lspconfig'.tsserver.setup({
+require 'lspconfig'.ts_ls.setup({
     capabilities = capabilities,
     on_attach = function(client, bufnr)
         on_attach(client, bufnr)
-        client.resolved_capabilities.document_formatting = false
-        client.resolved_capabilities.document_range_formatting = false
-        local ts_utils = require("nvim-lsp-ts-utils")
-        ts_utils.setup({})
-        ts_utils.setup_client(client)
     end,
 })
 
@@ -317,14 +312,14 @@ require 'lspconfig'.jdtls.setup {
 }
 
 require 'lspconfig'.volar.setup {
-  filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'},
-  capabilities = capabilities, on_attach = on_attach
+    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json' },
+    capabilities = capabilities, on_attach = on_attach
 
 }
 
 require 'lspconfig'.vuels.setup {
-  filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'},
-  capabilities = capabilities, on_attach = on_attach
+    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json' },
+    capabilities = capabilities, on_attach = on_attach
 }
 
 require 'lspconfig'.texlab.setup {
@@ -382,26 +377,27 @@ require 'lspconfig'.docker_compose_language_service.setup {
     on_attach = on_attach,
     capabilities = capabilities,
 }
-require'lspconfig'.solidity_ls_nomicfoundation.setup{
+require 'lspconfig'.solidity_ls_nomicfoundation.setup {
     on_attach = on_attach,
     capabilities = capabilities,
 }
-require'lspconfig'.solidity_ls.setup{
+require 'lspconfig'.solidity_ls.setup {
     on_attach = on_attach,
     capabilities = capabilities,
 }
 
+require 'lspconfig'.terraformls.setup {}
 
 -- local servers = { 'ccls', 'clangd', 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab', 'eslint' }
 local servers = { 'clangd', 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab', 'eslint',
     'rust_analyzer', 'csharp_ls', 'docker_compose_language_service', 'dockerls', 'solidity_ls_nomicfoundation',
-    'solidity_ls'}
+    'solidity_ls', 'terraformls', 'gopls', 'cssls', 'lua_ls' }
 -- local servers = { 'ccls', 'clangd' , 'jedi_language_server', 'tsserver', 'jdtls', 'vuels', 'ltex', 'texlab'}
-for _, lsp in ipairs(servers) do
-    lspconfig[lsp].setup {
-        capabilities = capabilities,
-    }
-end
+-- for _, lsp in ipairs(servers) do
+--     lspconfig[lsp].setup {
+--         capabilities = capabilities,
+--     }
+-- end
 
 
 
@@ -445,10 +441,10 @@ end
 vim.lsp.handlers["textDocument/publishDiagnostics"] =
     vim.lsp.with(vim.lsp.handlers["textDocument/publishDiagnostics"], {
         signs = {
-            severity_limit = "Error",
+            severity = { min = vim.diagnostic.severity.ERROR }
         },
         underline = {
-            severity_limit = "Warning",
+            severity = { min = vim.diagnostic.severity.WARN }
         },
         virtual_text = true,
     })

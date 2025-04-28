@@ -1,15 +1,15 @@
 -- require modules
 require('maps') -- basic remaps
 require('commands') -- basic vim commands i still can't write in lua
-require('plugins') -- plugins install
+require('plugins')      -- plugins install
 require('plugins-conf') -- minors plugins conf which don't deserve it's own file
+require("plugins_conf")
 require('commands')     -- basic vim commands i still can't write in lua
 require('lsp')          -- lsp clients config
 require('snips')        -- plugins config directory
 require 'lsp_extensions'.inlay_hints { prefix = '', highlight = "Comment", enabled = { "TypeHint", "ChainingHint", "ParameterHint" } }
 -- require("symbols-outline").setup()
 require("outline").setup({})
-require('plugins')      -- plugins install
 
 
 -- sets
@@ -83,6 +83,7 @@ function ColorMyPencils(color)
     vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
     vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
+
 
 ColorMyPencils()
 -- vim.cmd([[

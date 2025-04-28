@@ -11,31 +11,37 @@
 # Marc Schreiber - initial API and implementation
 ###############################################################################
 import argparse
+from hashlib import sha1
 import os
 import platform
 import re
 import subprocess
 from pathlib import Path
+import tempfile
 
-def get_java_executable(validate_java_version):
-	java_executable = 'java'
+def get_java_executable(known_args):
+	if known_args.java_executable is not None:
+		java_executable = known_args.java_executable
+	else:
+		java_executable = 'java'
 
-	if 'JAVA_HOME' in os.environ:
-		java_exec_to_test = Path(os.environ['JAVA_HOME']) / 'bin' / 'java'
-		if java_exec_to_test.is_file():
-			java_executable = java_exec_to_test.resolve()
+		if 'JAVA_HOME' in os.environ:
+			ext = '.exe' if platform.system() == 'Windows' else ''
+			java_exec_to_test = Path(os.environ['JAVA_HOME']) / 'bin' / f'java{ext}'
+			if java_exec_to_test.is_file():
+				java_executable = str(java_exec_to_test.resolve())
 
-	if not validate_java_version:
+	if not known_args.validate_java_version:
 		return java_executable
 
 	out = subprocess.check_output([java_executable, '-version'], stderr = subprocess.STDOUT, universal_newlines=True)
 
-	matches = re.finditer(r"(?P<major>\d+)\.\d+\.\d+", out)
+	matches = re.finditer(r"(?<=version\s\")(?P<major>\d+)(\.\d+\.\d+(_\d+)?)?", out)
 	for match in matches:
 		java_major_version = int(match.group("major"))
 
-		if java_major_version < 11:
-			raise Exception("jdtls requires at least Java 11")
+		if java_major_version < 17:
+			raise Exception("jdtls requires at least Java 17")
 
 		return java_executable
 
@@ -45,58 +51,63 @@ def find_equinox_launcher(jdtls_base_directory):
 	plugins_dir = jdtls_base_directory / "plugins"
 	launchers = plugins_dir.glob('org.eclipse.equinox.launcher_*.jar')
 	for launcher in launchers:
-		return plugins_dir / launcher
+		return str(plugins_dir / launcher)
 
 	raise Exception("Cannot find equinox launcher")
 
 def get_shared_config_path(jdtls_base_path):
 	system = platform.system()
 
-	if system == 'Linux':
+	if system in ['Linux', 'FreeBSD']:
 		config_dir = 'config_linux'
 	elif system == 'Darwin':
 		config_dir = 'config_mac'
 	elif system == 'Windows':
 		config_dir = 'config_win'
 	else:
-		raise Exception("Unknown platform {} detected".format(platform))
+		raise Exception("Unknown platform {} detected".format(system))
 
-	return jdtls_base_path / config_dir
+	return str(jdtls_base_path / config_dir)
 
 def main(args):
+	cwd_name = os.path.basename(os.getcwd())
+	jdtls_data_path = os.path.join(tempfile.gettempdir(), "jdtls-" + sha1(cwd_name.encode()).hexdigest())
+
 	parser = argparse.ArgumentParser()
-	parser.add_argument("--validate-java-version", default=True, action=argparse.BooleanOptionalAction)
+	parser.add_argument('--validate-java-version', action='store_true', default=True)
+	parser.add_argument('--no-validate-java-version', dest='validate_java_version', action='store_false')
+	parser.add_argument("--java-executable", help="Path to java executable used to start runtime.")
 	parser.add_argument("--jvm-arg",
 			default=[],
 			action="append",
 			help="An additional JVM option (can be used multiple times. Note, use with equal sign. For example: --jvm-arg=-Dlog.level=ALL")
+	parser.add_argument("-data", default=jdtls_data_path)
 
 	known_args, args = parser.parse_known_args(args)
-	java_executable = get_java_executable(known_args.validate_java_version)
+	java_executable = get_java_executable(known_args)
 
 	jdtls_base_path = Path(__file__).parent.parent
 	shared_config_path = get_shared_config_path(jdtls_base_path)
 	jar_path = find_equinox_launcher(jdtls_base_path)
 
-	os.system(("{java_exec}"
-		" -Declipse.application=org.eclipse.jdt.ls.core.id1"
-		" -Dosgi.bundles.defaultStartLevel=4"
-		" -Declipse.product=org.eclipse.jdt.ls.core.product"
-		" -Dosgi.checkConfiguration=true"
-		" -Dosgi.sharedConfiguration.area='{shared_config_path}'"
-		" -Dosgi.sharedConfiguration.area.readOnly=true"
-		" -Dosgi.configuration.cascaded=true"
-		" -noverify"
-		" -Xms1G"
-		" --add-modules=ALL-SYSTEM"
-		" --add-opens java.base/java.util=ALL-UNNAMED"
-		" --add-opens java.base/java.lang=ALL-UNNAMED"
-		" {jvm_options}"
-		" -jar '{jar_path}'"
-		" {args}").format(
-			java_exec = java_executable,
-			shared_config_path = shared_config_path,
-			jar_path = jar_path,
-			jvm_options = " ".join(f"'{w}'" for w in known_args.jvm_arg),
-			args = " ".join(f"'{w}'" for w in args)))
+	system = platform.system()
+	exec_args = ["-Declipse.application=org.eclipse.jdt.ls.core.id1",
+			"-Dosgi.bundles.defaultStartLevel=4",
+			"-Declipse.product=org.eclipse.jdt.ls.core.product",
+			"-Dosgi.checkConfiguration=true",
+			"-Dosgi.sharedConfiguration.area=" + shared_config_path,
+			"-Dosgi.sharedConfiguration.area.readOnly=true",
+			"-Dosgi.configuration.cascaded=true",
+			"-Xms1G",
+			"--add-modules=ALL-SYSTEM",
+			"--add-opens", "java.base/java.util=ALL-UNNAMED",
+			"--add-opens", "java.base/java.lang=ALL-UNNAMED"] \
+			+ known_args.jvm_arg \
+			+ ["-jar", jar_path,
+			"-data", known_args.data] \
+			+ args
 
+	if os.name == 'posix':
+		os.execvp(java_executable, exec_args)
+	else:
+		subprocess.run([java_executable] + exec_args)

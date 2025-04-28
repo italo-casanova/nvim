@@ -1,6 +1,11 @@
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+local status, jdtls = pcall(require, 'jdtls')
+if not status then
+  return
+end
+local extendedClientCapabilities = jdtls.extendedClientCapabilities
 
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 local config = {
@@ -13,17 +18,42 @@ local config = {
     '-Dlog.protocol=true',
 	'-noverify',
 	'-Xmx1G',
-	'-jar', '/home/italo/.config/nvim/java-language-server/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar',
+    '--add-modules=ALL-SYSTEM',
+    '--add-opens',
+    'java.base/java.util=ALL-UNNAMED',
+    '--add-opens',
+    'java.base/java.lang=ALL-UNNAMED',
+    '-jar', '/home/italo/.config/nvim/java-language-server/plugins/org.eclipse.equinox.launcher_*.jar',
 	'-configuration', '/home/italo/.config/nvim/java-language-server/config_linux',
-	'-data', vim.fn.expand('~/.cache/jdtls-workspace') .. project_name,
+	'-data', vim.fn.expand('~/.cache/jdtls-workspace/') .. project_name,
+    '-javaagent:/home/italo/.local/share/nvim/jdtls/lombok.jar',
   },
 
   -- root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'}),
   root_dir = vim.fs.dirname(vim.fs.find({'gradlew', '.git', 'mvnw'}, { upward = true })[1]),
   settings = {
     java = {
-    }
-  },
+        signatureHelp = { enabled = true },
+      extendedClientCapabilities = extendedClientCapabilities,
+      maven = {
+        downloadSources = true,
+      },
+      referencesCodeLens = {
+        enabled = true,
+      },
+      references = {
+        includeDecompiledSources = true,
+      },
+      inlayHints = {
+        parameterNames = {
+          enabled = 'all', -- literals, all, none
+        },
+      },
+      format = {
+        enabled = false,
+      },
+    },
+    },
 
   init_options = {
     bundles = {}
@@ -59,5 +89,4 @@ vim.api.nvim_set_keymap("v", "<leader>dm", "<Esc><Cmd>lua require('jdtls').extra
 
 vim.api.nvim_set_keymap("n", "<leader>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
-require('jdtls').start_or_attach(config)
 require('jdtls').start_or_attach(config)

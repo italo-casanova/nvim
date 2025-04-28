@@ -6,11 +6,8 @@
 -- }
 --
 require("ibl").setup()
-<<<<<<< HEAD
 
 -- require("ibl").setup({ scope = { enabled = true } })
-=======
->>>>>>> refs/remotes/origin/master
 
 require('nvim-autopairs').setup{}
 

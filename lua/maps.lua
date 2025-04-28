@@ -70,7 +70,7 @@ vim.api.nvim_set_keymap('n', '<leader>dr', ':lua require"dap".repl.toggle({}, "v
 vim.api.nvim_set_keymap('n', '<leader>de', ':lua require"dap".set_exception_breakpoints({"all"})<CR>', {noremap = true, silent = true})
 
 
-vim.api.nvim_set_keymap("n", "<leader>cp", "<cmd>:! pdflatex %<CR><CR>", {noremap = true})
+vim.api.nvim_set_keymap("n", "<leader>cp", "<cmd>:w<CR><cmd>:! lualatex %<CR><CR>", {noremap = true})
 -- vim.api.nvim_set_keymap("n", "<leader>rp", "<cmd>:! zathura $(echo %\\| sed 's/tex$/pdf/') & disown<CR><CR>", {noremap = true})
 
 local keymap = vim.api.nvim_set_keymap
