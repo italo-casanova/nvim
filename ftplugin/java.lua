@@ -10,27 +10,29 @@ local extendedClientCapabilities = jdtls.extendedClientCapabilities
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 local config = {
   cmd = {
-	'java',
-	'-Declipse.application=org.eclipse.jdt.ls.core.id1',
-    '-Dosgi.bundles.defaultStartLevel=4',
-	'-Declipse.product=org.eclipse.jdt.ls.core.product',
-	'-Dlog.level=ALL',
-    '-Dlog.protocol=true',
-	'-noverify',
-	'-Xmx1G',
-    '--add-modules=ALL-SYSTEM',
-    '--add-opens',
-    'java.base/java.util=ALL-UNNAMED',
-    '--add-opens',
-    'java.base/java.lang=ALL-UNNAMED',
-    '-jar', '/home/italo/.config/nvim/java-language-server/plugins/org.eclipse.equinox.launcher_*.jar',
-	'-configuration', '/home/italo/.config/nvim/java-language-server/config_linux',
-	'-data', vim.fn.expand('~/.cache/jdtls-workspace/') .. project_name,
-    '-javaagent:/home/italo/.local/share/nvim/jdtls/lombok.jar',
+    "java",
+    "--enable-native-access=ALL-UNNAMED",
+    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+    "-Dosgi.bundles.defaultStartLevel=4",
+    "-Declipse.product=org.eclipse.jdt.ls.core.product",
+    "-Dlog.level=ALL",
+    "-Dlog.protocol=true",
+    '-Dlog.backing=none',  -- 👈️ IMPORTANTE: evita logs en stdout
+    "-Xmx4G",
+    "--add-modules=ALL-SYSTEM",
+    "--add-opens", "java.base/java.util=ALL-UNNAMED",
+    "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+    "-javaagent:/home/italo/.local/share/nvim/jdtls/lombok.jar",
+
+    "-jar", "/home/italo/.config/nvim/java-language-server/plugins/org.eclipse.equinox.launcher_1.7.0.v20250519-0528.jar",
+    "-configuration", "/home/italo/.config/nvim/java-language-server/config_linux",
+    "-data", vim.fn.expand('~/.cache/jdtls-workspace/') .. project_name,
+   -- '/usr/bin/jdtls'
+
   },
 
   -- root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'}),
-  root_dir = vim.fs.dirname(vim.fs.find({'gradlew', '.git', 'mvnw'}, { upward = true })[1]),
+  root_dir = vim.fs.dirname(vim.fs.find({'gradlew', '.git', 'mvnw', 'pom.xml'}, { upward = true })[1]),
   settings = {
     java = {
         signatureHelp = { enabled = true },

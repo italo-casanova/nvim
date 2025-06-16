@@ -13,14 +13,6 @@ vim.cmd([[let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzz
 vim.cmd('let g:tex_no_error=1')
 
 vim.cmd([[
-augroup THE_PRIMEAGEN
-    autocmd!
-    autocmd BufWritePre lua,cpp,c,h,hpp,cxx,cc,py,xml Neoformat
-    autocmd BufWritePre * %s/\s\+$//e
-    autocmd BufEnter,BufWinEnter,TabEnter *.rs :lua require'lsp_extensions'.inlay_hints{}
-augroup END ]])
-
-vim.cmd([[
    augroup highlight_yank
     autocmd!
     autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 40})
