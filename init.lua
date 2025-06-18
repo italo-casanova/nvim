@@ -100,16 +100,11 @@ autocmd({ "BufWritePre" }, {
     command = [[%s/\s\+$//e]],
 })
 
-autocmd('BufEnter', {
-    group = GeneralGroup,
-    callback = function()
-        if vim.bo.filetype == "zig" then
-            vim.cmd.colorscheme("tokyonight-night")
-        else
-            vim.cmd.colorscheme("rose-pine-moon")
-            -- vim.cmd.colorscheme("gruvbox")
-        end
-    end
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = { "*.py", "*.go" }, -- Add more as needed
+  callback = function(args)
+    require("conform").format({ bufnr = args.buf })
+  end,
 })
 
 
@@ -124,9 +119,12 @@ autocmd('LspAttach', {
         vim.keymap.set("n", "<leader>ca", function() vim.lsp.buf.code_action() end, opts)
         vim.keymap.set("n", "<leader>rr", function() vim.lsp.buf.references() end, opts)
         vim.keymap.set("n", "<leader>rn", function() vim.lsp.buf.rename() end, opts)
+        vim.keymap.set("n", "]q", ":cnext<CR>", { desc = "Next quickfix item" })
+        vim.keymap.set("n", "[q", ":cprev<CR>", { desc = "Previous quickfix item" })
         vim.keymap.set("i", "<C-h>", function() vim.lsp.buf.signature_help() end, opts)
         vim.keymap.set("n", "[d", function() vim.diagnostic.goto_next() end, opts)
         vim.keymap.set("n", "]d", function() vim.diagnostic.goto_prev() end, opts)
         vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, opts)
     end
 })
+

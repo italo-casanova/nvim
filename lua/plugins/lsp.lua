@@ -24,12 +24,11 @@ return {
         'nvim-lua/lsp_extensions.nvim',
         'nvim-lua/lsp-status.nvim',
         'onsails/lspkind-nvim',
-	    'mfussenegger/nvim-jdtls'
+        'mfussenegger/nvim-jdtls'
     },
 
     config = function()
-
-require 'lsp_extensions'.inlay_hints { prefix = '', highlight = "Comment", enabled = { "TypeHint", "ChainingHint", "ParameterHint" } }
+        require 'lsp_extensions'.inlay_hints { prefix = '', highlight = "Comment", enabled = { "TypeHint", "ChainingHint", "ParameterHint" } }
         require("conform").setup({
             formatters_by_ft = {
             }
@@ -208,6 +207,9 @@ require 'lsp_extensions'.inlay_hints { prefix = '', highlight = "Comment", enabl
             capabilities = capabilities,
             filetype = { "python" },
         })
+        lspconfig.ruff.setup({
+            capabilities = capabilities,
+        })
 
         lspconfig.clangd.setup({
             cmd = {
@@ -255,20 +257,20 @@ require 'lsp_extensions'.inlay_hints { prefix = '', highlight = "Comment", enabl
         }
 
         lspconfig.ts_ls.setup({
-             init_options = {
+            init_options = {
                 plugins = {
-                  {
-                    name = "@vue/typescript-plugin",
-                    location = "/usr/local/lib/node_modules/@vue/typescript-plugin",
-                    languages = {"javascript", "typescript", "vue"},
-                  },
+                    {
+                        name = "@vue/typescript-plugin",
+                        location = "/usr/local/lib/node_modules/@vue/typescript-plugin",
+                        languages = { "javascript", "typescript", "vue" },
+                    },
                 },
-              },
-              filetypes = {
+            },
+            filetypes = {
                 "javascript",
                 "typescript",
                 "vue",
-              },
+            },
             capabilities = capabilities,
         })
 
