@@ -9,6 +9,27 @@ local root_files = {
     '.git',
 }
 
+local uv = vim.loop
+
+local function read_ltex_language()
+    local config_file = vim.fn.getcwd() .. "/ltex-lang.json"
+    local file = io.open(config_file, "r")
+    if not file then
+        return "en"
+    end
+
+    local content = file:read("*a")
+    file:close()
+    local ok, json = pcall(vim.fn.json_decode, content)
+    if ok and json and json.language then
+        return json.language
+    else
+        return "en"
+    end
+end
+
+local project_language = read_ltex_language()
+
 return {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -30,12 +51,12 @@ return {
     config = function()
         require 'lsp_extensions'.inlay_hints { prefix = '', highlight = "Comment", enabled = { "TypeHint", "ChainingHint", "ParameterHint" } }
         require("conform").setup({
-            formatters_by_ft = {
-            }
+            formatters_by_ft = {}
         })
+
         local sumneko_root_path = "/home/italo/.config/nvim/lua-language-server"
         local sumneko_binary = sumneko_root_path .. "/bin/lua-language-server"
-        local lspconfig = require 'lspconfig'
+
         local luasnip = require("luasnip")
         local lsp_util = vim.lsp.util
         local lspkind = require("lspkind")
@@ -63,7 +84,6 @@ return {
                 ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
                 ['<C-y>'] = cmp.mapping.confirm({ select = true }),
                 ["<C-Space>"] = cmp.mapping.complete(),
-
                 ['<Tab>'] = nil,
                 ['<S-Tab>'] = nil,
                 ["<C-d>"] = cmp.mapping.scroll_docs(-4),
@@ -76,7 +96,6 @@ return {
                     },
                     { "i", "c" }
                 ),
-
                 ["<c-space>"] = cmp.mapping {
                     i = cmp.mapping.complete(),
                     c = function(_)
@@ -89,15 +108,12 @@ return {
                         end
                     end,
                 },
-
             }),
             window = {
                 completion = cmp.config.window.bordered(),
                 documentation = cmp.config.window.bordered(),
             },
-            view = {
-                entries = "native"
-            },
+            view = { entries = "native" },
             formatting = {
                 format = lspkind.cmp_format {
                     mode = 'text_symbol',
@@ -106,17 +122,15 @@ return {
                         luasnip = "[SNIP]",
                         nvim_lsp = "[LSP]",
                         nvim_lua = "[API]",
-                        buffer = "[BUFF]",
                         path = "[PATH]",
+                        buffer = "[BUFF]",
                         gh_issues = "[ISSUES]",
-                        ["vim-dadbod-completion"] = "[SQL]", -- For Dadbod
-                        zsh = "[ZSH]",                       -- For Zsh
+                        ["vim-dadbod-completion"] = "[SQL]",
+                        zsh = "[ZSH]",
                     },
                 },
             },
-            experimental = {
-                ghost_text = true,
-            },
+            experimental = { ghost_text = true },
             sources = cmp.config.sources({
                 { name = "copilot", group_index = 2 },
                 { name = 'nvim_lsp' },
@@ -125,7 +139,6 @@ return {
                 { name = 'buffer' },
             })
         })
-
 
         vim.diagnostic.config({
             float = {
@@ -136,23 +149,15 @@ return {
                 header = "",
                 prefix = "",
             },
-            signs = {
-                severity = { min = vim.diagnostic.severity.ERROR }
-            },
-            underline = {
-                severity = { min = vim.diagnostic.severity.WARN }
-            },
+            signs = { severity = { min = vim.diagnostic.severity.ERROR } },
+            underline = { severity = { min = vim.diagnostic.severity.WARN } },
             virtual_text = true,
         })
 
-        -- luasnip.loaders.from_lua.load({ path = "~/.config/nvim/lua/plugins_conf/snippets" })
-
-        -- LSP Capabilities
         capabilities = cmp_lsp.default_capabilities(capabilities)
         capabilities.textDocument.completion.completionItem.snippetSupport = true
         capabilities.offsetEncoding = { 'utf-8', 'utf-16' }
 
-        -- Custom LSP handlers
         vim.lsp.handlers["textDocument/definition"] = function(_, result)
             if not result or vim.tbl_isempty(result) then
                 print "[LSP] Could not find definition"
@@ -176,87 +181,136 @@ return {
                 lsp_util.jump_to_location(result, "utf-8")
             end
         end
-        -- Setup individual LSP servers
-        lspconfig.lua_ls.setup {
+
+        -- ========================================
+        -- LSP CONFIGS (DEFERRED START)
+        -- ========================================
+
+        -- Lua
+        vim.lsp.config["lua_ls"] = {
             cmd = { sumneko_binary, "-E", sumneko_root_path .. "/main.lua" },
             settings = {
                 Lua = {
-                    runtime = {
-                        version = 'LuaJIT',
-                        path = vim.split(package.path, ";"),
-                    },
-                    diagnostics = {
-                        globals = { 'vim' },
-                    },
+                    runtime = { version = 'LuaJIT', path = vim.split(package.path, ";") },
+                    diagnostics = { globals = { 'vim' } },
                     workspace = {
                         library = vim.api.nvim_get_runtime_file("", true),
                         checkThirdParty = false,
                     },
-                    telemetry = {
-                        enable = false,
+                    telemetry = { enable = false },
+                },
+            },
+        }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = "lua",
+            callback = function()
+                vim.lsp.start(vim.lsp.config["lua_ls"])
+            end,
+        })
+
+        -- Pyright
+        vim.lsp.config["pyright"] = { capabilities = capabilities }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = "python",
+            callback = function()
+                vim.lsp.start(vim.lsp.config["pyright"])
+            end,
+        })
+
+        vim.lsp.config["ruff"] = { capabilities = capabilities }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = "python",
+            callback = function()
+                vim.lsp.start(vim.lsp.config["ruff"])
+            end,
+        })
+
+        -- LTeX
+        vim.lsp.config["ltex"] = {
+            capabilities = capabilities,
+            cmd = { "/home/italo/.local/bin/ltex-wrapper" },
+            settings = {
+                ltex = {
+                    language = project_language,
+                    enabled = true,
+                    additionalRules = {
+                        enablePickyRules = true,
+                        motherTongue = project_language == "es-PE" and "es" or "en",
                     },
                 },
             },
         }
-
-        lspconfig.ltex.setup {
-            capabilities = capabilities,
-        }
-
-        lspconfig.pyright.setup({
-            capabilities = capabilities,
-            filetype = { "python" },
-        })
-        lspconfig.ruff.setup({
-            capabilities = capabilities,
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "markdown", "text", "latex", "tex", "rst" },
+            callback = function()
+                vim.lsp.start(vim.lsp.config["ltex"])
+            end,
         })
 
-        lspconfig.clangd.setup({
+        -- C / C++
+        vim.lsp.config["clangd"] = {
             cmd = {
-                "clangd --offset-encoding=utf-16",
+                "clangd",
+                "--offset-encoding=utf-16",
                 "--background-index",
                 "--suggest-missing-includes",
                 "--clang-tidy",
                 "--header-insertion=iwyu",
             },
-            filetypes = { "c", "cpp", "objc", "objcpp" },
-            offsetEncoding = { 'utf-8', 'utf-16' },
             capabilities = capabilities,
-            root_dir = lspconfig.util.root_pattern('compile_commands.json', '.git'),
+        }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "c", "cpp", "objc", "objcpp" },
+            callback = function()
+                vim.lsp.start(vim.lsp.config["clangd"])
+            end,
         })
 
-        -- Rust Analyzer with custom capabilities
+        -- Rust
         local rust_capabilities = capabilities
         rust_capabilities.codeAction = {
             codeActionLiteralSupport = {
                 codeActionKind = {
-                    valueSet = { "quickfix", "refactor", "refactor.extract", "refactor.inline", "refactor.rewrite", "source", "source.organizeImports" }
+                    valueSet = {
+                        "quickfix", "refactor", "refactor.extract",
+                        "refactor.inline", "refactor.rewrite",
+                        "source", "source.organizeImports"
+                    }
                 }
             }
         }
-        lspconfig.rust_analyzer.setup({
+        vim.lsp.config["rust_analyzer"] = {
             cmd = { "rustup", "run", "nightly", "rust-analyzer" },
             capabilities = rust_capabilities,
-            settings = {
-                ['rust-analyzer'] = {
-                    diagnostics = {
-                        enable = true,
-                    }
-                }
-            },
-            root_dir = lspconfig.util.root_pattern("Cargo.toml", "rust-project.json", ".git"),
+            settings = { ["rust-analyzer"] = { diagnostics = { enable = true } } },
+        }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = "rust",
+            callback = function()
+                vim.lsp.start(vim.lsp.config["rust_analyzer"])
+            end,
         })
 
-        lspconfig.jdtls.setup {
-            capabilities = capabilities,
-        }
+        -- Java
+        vim.lsp.config["jdtls"] = { capabilities = capabilities }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = "java",
+            callback = function()
+                vim.lsp.start(vim.lsp.config["jdtls"])
+            end,
+        })
 
-        lspconfig.vuels.setup {
-            filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json' },
-            capabilities = capabilities,
-        }
+        -- Vue / TS / JS
+        vim.lsp.config["vuels"] = { capabilities = capabilities }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue", "json" },
+            callback = function()
+                vim.lsp.start(vim.lsp.config["vuels"])
+            end,
+        })
 
-        lspconfig.ts_ls.setup({
+        vim.lsp.config["ts_ls"] = {
+            capabilities = capabilities,
             init_options = {
                 plugins = {
                     {
@@ -266,53 +320,93 @@ return {
                     },
                 },
             },
-            filetypes = {
-                "javascript",
-                "typescript",
-                "vue",
-            },
-            capabilities = capabilities,
+        }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "typescript", "javascript", "vue" },
+            callback = function()
+                vim.lsp.start(vim.lsp.config["ts_ls"])
+            end,
         })
 
+        -- LaTeX
+        vim.lsp.config["texlab"] = { capabilities = capabilities }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "tex", "latex" },
+            callback = function()
+                vim.lsp.start(vim.lsp.config["texlab"])
+            end,
+        })
 
-        lspconfig.texlab.setup {
+        -- ESLint
+        vim.lsp.config["eslint"] = {
             capabilities = capabilities,
+            root_dir = vim.fs.dirname(vim.fs.find({ ".eslintrc.js", "package.json", ".git" }, { upward = true })[1]),
         }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "javascript", "typescript", "vue" },
+            callback = function()
+                vim.lsp.start(vim.lsp.config["eslint"])
+            end,
+        })
 
-        lspconfig.eslint.setup {
-            capabilities = capabilities,
-            root_dir = lspconfig.util.root_pattern('.eslintrc.js', 'package.json', '.git'),
-        }
-
-        lspconfig.gopls.setup {
+        -- Go
+        vim.lsp.config["gopls"] = {
             capabilities = capabilities,
             cmd = { "gopls" },
-            filetypes = { "go", "gomod", "gotmpl" }, -- Corrected gotmtl to gotmpl
-            root_dir = lspconfig.util.root_pattern(".git", "go.mod"),
         }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "go", "gomod", "gotmpl" },
+            callback = function()
+                vim.lsp.start(vim.lsp.config["gopls"])
+            end,
+        })
 
+        -- Docker
+        vim.lsp.config["dockerls"] = { capabilities = capabilities }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "dockerfile" },
+            callback = function()
+                vim.lsp.start(vim.lsp.config["dockerls"])
+            end,
+        })
 
-        lspconfig.dockerls.setup {
-            capabilities = capabilities,
-        }
+        vim.lsp.config["docker_compose_language_service"] = { capabilities = capabilities }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "yaml", "yml" },
+            callback = function()
+                vim.lsp.start(vim.lsp.config["docker_compose_language_service"])
+            end,
+        })
 
-        lspconfig.docker_compose_language_service.setup {
-            capabilities = capabilities,
-        }
+        -- Solidity
+        vim.lsp.config["solidity_ls_nomicfoundation"] = { capabilities = capabilities }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "solidity" },
+            callback = function()
+                vim.lsp.start(vim.lsp.config["solidity_ls_nomicfoundation"])
+            end,
+        })
 
-        lspconfig.solidity_ls_nomicfoundation.setup {
-            capabilities = capabilities,
-        }
+        vim.lsp.config["solidity_ls"] = { capabilities = capabilities }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "solidity" },
+            callback = function()
+                vim.lsp.start(vim.lsp.config["solidity_ls"])
+            end,
+        })
 
-        lspconfig.solidity_ls.setup {
-            capabilities = capabilities,
-        }
+        -- Terraform
+        vim.lsp.config["terraformls"] = { capabilities = capabilities }
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "terraform", "tf", "hcl" },
+            callback = function()
+                vim.lsp.start(vim.lsp.config["terraformls"])
+            end,
+        })
 
-        lspconfig.terraformls.setup {
-            capabilities = capabilities,
-        }
-
-        -- Autocmds for specific filetypes and completion sources
+        -- ========================================
+        -- Autocmds for extra completions
+        -- ========================================
         vim.api.nvim_create_augroup('DadbodSql', { clear = true })
         vim.api.nvim_create_autocmd('FileType', {
             group = 'DadbodSql',
@@ -331,20 +425,25 @@ return {
             end
         })
 
-        vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, { -- <--- FIX IS HERE
+        vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
             pattern = '*.org',
             callback = function()
                 vim.opt.filetype = 'org'
             end
         })
 
-        -- Moved `PeekDefinition` and `PeekDeclaration` inside config if they are only used there.
-        -- If they are meant to be global functions, they should be defined outside the return block.
         local function preview_location_callback(_, result)
             if result == nil or vim.tbl_isempty(result) then
                 return nil
             end
             lsp_util.preview_location(result[1])
+        end
+
+        local util = require('vim.lsp.util')
+        local orig = util.apply_text_edits
+        function util.apply_text_edits(edits, bufnr, encoding, change_annotations)
+            change_annotations = change_annotations or {}
+            return orig(edits, bufnr, encoding, change_annotations)
         end
     end
 }

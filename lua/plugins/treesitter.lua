@@ -7,13 +7,15 @@ return {
         -- Dependencies for nvim-treesitter
         dependencies = {
             "nvim-treesitter/nvim-treesitter-textobjects", -- For advanced text selection based on tree-sitter nodes
-            "nvim-treesitter/nvim-treesitter-context",      -- For showing context of code blocks at the top of the window
-            "HiPhish/rainbow-delimiters.nvim",              -- For colorful delimiters (parentheses, brackets, braces)
+            "nvim-treesitter/nvim-treesitter-context",     -- For showing context of code blocks at the top of the window
+            "HiPhish/rainbow-delimiters.nvim",             -- For colorful delimiters (parentheses, brackets, braces)
+            "OXY2DEV/markview.nvim"
         },
         ---@type LazyKeys[]
         -- Keymaps for toggling Treesitter Context behavior
+        lazy = false,
         keys = {
-            { "<leader>cf", function() require("treesitter-context").setup({ show_all_context = true }) end, desc = "Treesitter Context: Show Full" },
+            { "<leader>cf", function() require("treesitter-context").setup({ show_all_context = true }) end,  desc = "Treesitter Context: Show Full" },
             { "<leader>cp", function() require("treesitter-context").setup({ show_all_context = false }) end, desc = "Treesitter Context: Show Partial" },
         },
         ---@type nvim-treesitter.configs.Config
@@ -121,19 +123,19 @@ return {
         config = function()
             -- IMPORTANT: Use 'treesitter-context' as the module name for require
             require('treesitter-context').setup({
-                enable = true,           -- Enable this plugin (Can be enabled/disabled later via commands)
-                throttle = true,         -- Throttles updates for performance.
-                max_lines = 0,           -- How many lines the context window should span. Values <= 0 mean no limit.
-                min_window_height = 0,   -- Minimum editor window height to enable context. Values <= 0 mean no limit.
-                line_numbers = true,     -- Show line numbers in the context window.
+                enable = true,            -- Enable this plugin (Can be enabled/disabled later via commands)
+                throttle = true,          -- Throttles updates for performance.
+                max_lines = 0,            -- How many lines the context window should span. Values <= 0 mean no limit.
+                min_window_height = 0,    -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+                line_numbers = true,      -- Show line numbers in the context window.
                 multiline_threshold = 20, -- Maximum number of lines to show for a single context entry.
-                trim_scope = 'outer',    -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-                mode = 'cursor',         -- Line used to calculate context. Choices: 'cursor', 'topline'
-                separator = nil,         -- Separator between context and content. (nil means no explicit separator).
-                zindex = 20,             -- The Z-index of the context window.
-                on_attach = nil,         -- (fun(buf: integer): boolean) return false to disable attaching for a specific buffer.
-                multiwindow = false,     -- Disable multiwindow support (context shown only in the current window).
-                show_all_context = true, -- Default to showing all context, keymaps can toggle this.
+                trim_scope = 'outer',     -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+                mode = 'cursor',          -- Line used to calculate context. Choices: 'cursor', 'topline'
+                separator = nil,          -- Separator between context and content. (nil means no explicit separator).
+                zindex = 20,              -- The Z-index of the context window.
+                on_attach = nil,          -- (fun(buf: integer): boolean) return false to disable attaching for a specific buffer.
+                multiwindow = false,      -- Disable multiwindow support (context shown only in the current window).
+                show_all_context = true,  -- Default to showing all context, keymaps can toggle this.
                 -- Patterns to match for TS nodes to display in context
                 patterns = {
                     default = { "function", "method", "for", "while", "if", "switch", "case" },

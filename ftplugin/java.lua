@@ -2,70 +2,71 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 local status, jdtls = pcall(require, 'jdtls')
+local home = os.getenv("HOME")
 if not status then
-  return
+    return
 end
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
 
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 local config = {
-  cmd = {
-    "java",
-    "--enable-native-access=ALL-UNNAMED",
-    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-    "-Dosgi.bundles.defaultStartLevel=4",
-    "-Declipse.product=org.eclipse.jdt.ls.core.product",
-    "-Dlog.level=ALL",
-    "-Dlog.protocol=true",
-    '-Dlog.backing=none',  -- 👈️ IMPORTANTE: evita logs en stdout
-    "-Xmx4G",
-    "--add-modules=ALL-SYSTEM",
-    "--add-opens", "java.base/java.util=ALL-UNNAMED",
-    "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-    "-javaagent:/home/italo/.local/share/nvim/jdtls/lombok.jar",
+    cmd = {
+        "java",
+        "--enable-native-access=ALL-UNNAMED",
+        "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+        "-Dosgi.bundles.defaultStartLevel=4",
+        "-Declipse.product=org.eclipse.jdt.ls.core.product",
+        "-Dlog.level=ALL",
+        "-Dlog.protocol=true",
+        '-Dlog.backing=none',
+        "-Xmx4G",
+        "-javaagent:" .. home .. "/.local/share/nvim/jdtls/lombok.jar",
+        "--add-modules=ALL-SYSTEM",
+        "--add-opens", "java.base/java.util=ALL-UNNAMED",
+        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+        "-jar",
+        "/home/italo/.config/nvim/java-language-server/plugins/org.eclipse.equinox.launcher_1.7.0.v20250519-0528.jar",
+        "-configuration", "/home/italo/.config/nvim/java-language-server/config_linux",
+        "-data", vim.fn.expand('~/.cache/jdtls-workspace/') .. project_name,
+        -- '/usr/bin/jdtls'
 
-    "-jar", "/home/italo/.config/nvim/java-language-server/plugins/org.eclipse.equinox.launcher_1.7.0.v20250519-0528.jar",
-    "-configuration", "/home/italo/.config/nvim/java-language-server/config_linux",
-    "-data", vim.fn.expand('~/.cache/jdtls-workspace/') .. project_name,
-   -- '/usr/bin/jdtls'
+    },
 
-  },
-
-  -- root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'}),
-  root_dir = vim.fs.dirname(vim.fs.find({'gradlew', '.git', 'mvnw', 'pom.xml'}, { upward = true })[1]),
-  settings = {
-    java = {
-        signatureHelp = { enabled = true },
-      extendedClientCapabilities = extendedClientCapabilities,
-      maven = {
-        downloadSources = true,
-      },
-      referencesCodeLens = {
-        enabled = true,
-      },
-      references = {
-        includeDecompiledSources = true,
-      },
-      inlayHints = {
-        parameterNames = {
-          enabled = 'all', -- literals, all, none
+    -- root_dir = require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'}),
+    root_dir = vim.fs.dirname(vim.fs.find({ 'gradlew', '.git', 'mvnw', 'pom.xml' }, { upward = true })[1]),
+    settings = {
+        java = {
+            signatureHelp = { enabled = true },
+            extendedClientCapabilities = extendedClientCapabilities,
+            maven = {
+                downloadSources = true,
+            },
+            referencesCodeLens = {
+                enabled = true,
+            },
+            references = {
+                includeDecompiledSources = true,
+            },
+            inlayHints = {
+                parameterNames = {
+                    enabled = 'all', -- literals, all, none
+                },
+            },
+            format = {
+                enabled = false,
+            },
         },
-      },
-      format = {
-        enabled = false,
-      },
-    },
     },
 
-  init_options = {
-    bundles = {}
-  },
+    init_options = {
+        bundles = {}
+    },
 
-  capabilities = capabilities
+    capabilities = capabilities
 }
 
 
-local opts = { noremap=true, silent=true }
+local opts = { noremap = true, silent = true }
 vim.api.nvim_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
 vim.api.nvim_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
 vim.api.nvim_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
